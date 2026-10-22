@@ -59,3 +59,18 @@ jest.mock('react-i18next', () => ({
   },
 }));
 
+jest.mock('react-native-config', () => ({
+  Config: {
+    APP_ENV: 'test',
+    API_BASE_URL: 'https://tapzacare.in/api/v1',
+    WEB_DOMAIN: 'https://tapzacare.in',
+    DEEP_LINK_SCHEME: 'tapzacare://',
+  },
+  default: {
+    APP_ENV: 'test',
+    API_BASE_URL: 'https://tapzacare.in/api/v1',
+    WEB_DOMAIN: 'https://tapzacare.in',
+    DEEP_LINK_SCHEME: 'tapzacare://',
+  },
+}));
+

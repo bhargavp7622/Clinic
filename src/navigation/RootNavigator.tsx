@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Config from 'react-native-config';
 import { RootStackParamList } from '@types';
 import { BookingScreen, PrescriptionDetailScreen, AdminConfigScreen } from '@screens';
 import { useAppTheme } from '@context';
@@ -8,8 +9,11 @@ import { TabNavigator } from './TabNavigator';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const DEEP_LINK_SCHEME = Config.DEEP_LINK_SCHEME || '';
+const WEB_DOMAIN = Config.WEB_DOMAIN || '';
+
 const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: ['tapzacare://', 'https://tapzacare.in'],
+  prefixes: [DEEP_LINK_SCHEME, WEB_DOMAIN],
   config: {
     screens: {
       MainTabs: {
