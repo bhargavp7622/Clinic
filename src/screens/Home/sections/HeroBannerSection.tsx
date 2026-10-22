@@ -59,7 +59,6 @@ export const HeroBannerSection: React.FC<HeroBannerSectionProps> = React.memo(({
           },
         ]}
       >
-        {/* Top Tag */}
         <View style={styles.tagContainer}>
           <View style={[styles.tagBadge, { backgroundColor: theme.colors.surface }]}>
             <Icon name="sparkles" size={14} color={theme.colors.accent} />
@@ -69,7 +68,6 @@ export const HeroBannerSection: React.FC<HeroBannerSectionProps> = React.memo(({
           </View>
         </View>
 
-        {/* Title */}
         <AppText
           variant="headlineLarge"
           weight="800"
@@ -79,7 +77,6 @@ export const HeroBannerSection: React.FC<HeroBannerSectionProps> = React.memo(({
           {titleText}
         </AppText>
 
-        {/* Subtitle */}
         {subtitleText ? (
           <AppText
             variant="bodyMedium"
@@ -90,7 +87,6 @@ export const HeroBannerSection: React.FC<HeroBannerSectionProps> = React.memo(({
           </AppText>
         ) : null}
 
-        {/* Action Button */}
         {ctaText ? (
           <View style={styles.buttonWrapper}>
             <Button
@@ -128,3 +124,5 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
 });
+
+export default HeroBannerSection;

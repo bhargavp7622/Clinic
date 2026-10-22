@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -9,23 +9,37 @@ import { triggerHaptic } from '@utils';
 import { changeLanguage } from '@/i18n';
 import { useTranslation } from 'react-i18next';
 
+const LANGUAGE_OPTIONS: Array<{ code: 'en' | 'hi' | 'te'; label: string }> = [
+  { code: 'en', label: 'English' },
+  { code: 'hi', label: 'हिंदी' },
+  { code: 'te', label: 'తెలుగు' },
+];
+
 export const ProfileScreen: React.FC = React.memo(() => {
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const { activeMode } = useConfig();
   const { t, i18n } = useTranslation();
 
-  const handleLanguageChange = (lang: 'en' | 'hi' | 'te') => {
+  const handleLanguageChange = useCallback((lang: 'en' | 'hi' | 'te') => {
     triggerHaptic('light');
     changeLanguage(lang);
-  };
+  }, []);
+
+  const handleOpenAdminConfig = useCallback(() => {
+    triggerHaptic('light');
+    navigation.navigate('AdminConfig');
+  }, [navigation]);
+
+  const activeThemeLabel = useMemo(() => {
+    return activeMode === 'festival' ? t('admin.festival_config') : t('admin.normal_config');
+  }, [activeMode, t]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
       <AppHeader title={t('profile.title')} showBack={false} />
 
       <ScrollView contentContainerStyle={{ padding: theme.spacing.md, gap: 16 }}>
-        {/* Patient Card */}
         <View
           style={{
             backgroundColor: theme.colors.surface,
@@ -79,7 +93,6 @@ export const ProfileScreen: React.FC = React.memo(() => {
           </View>
         </View>
 
-        {/* Multi-language Selector (English, Hindi, Telugu) */}
         <View
           style={{
             backgroundColor: theme.colors.surface,
@@ -98,17 +111,13 @@ export const ProfileScreen: React.FC = React.memo(() => {
           </AppText>
 
           <View style={{ flexDirection: 'row', gap: 8 }}>
-            {[
-              { code: 'en', label: 'English' },
-              { code: 'hi', label: 'हिंदी' },
-              { code: 'te', label: 'తెలుగు' },
-            ].map(item => {
+            {LANGUAGE_OPTIONS.map(item => {
               const isActive = i18n.language === item.code;
               return (
                 <TouchableOpacity
                   key={item.code}
                   activeOpacity={0.8}
-                  onPress={() => handleLanguageChange(item.code as any)}
+                  onPress={() => handleLanguageChange(item.code)}
                   style={{
                     flex: 1,
                     minHeight: theme.minTouchTarget,
@@ -134,13 +143,9 @@ export const ProfileScreen: React.FC = React.memo(() => {
           </View>
         </View>
 
-        {/* Active Theme & Admin Control Entry */}
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => {
-            triggerHaptic('light');
-            navigation.navigate('AdminConfig');
-          }}
+          onPress={handleOpenAdminConfig}
           style={{
             backgroundColor: theme.colors.surface,
             borderRadius: theme.borderRadius.lg,
@@ -172,7 +177,7 @@ export const ProfileScreen: React.FC = React.memo(() => {
               </AppText>
               <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
                 {t('profile.current_theme', {
-                  theme: activeMode === 'festival' ? t('admin.festival_config') : t('admin.normal_config'),
+                  theme: activeThemeLabel,
                 })}
               </AppText>
             </View>

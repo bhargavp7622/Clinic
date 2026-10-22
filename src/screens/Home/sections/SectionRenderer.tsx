@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Animated } from 'react-native';
 import { SectionConfig } from '@types';
 import { SectionWrapper } from './SectionWrapper';
@@ -28,7 +28,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = React.memo(({
     return null;
   }
 
-  const handleAction = (action?: string) => {
+  const handleAction = useCallback((action?: string) => {
     if (!action) return;
     if (action.includes('bookings')) {
       onNavigateBooking?.();
@@ -37,7 +37,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = React.memo(({
     } else if (action.includes('admin') || action.includes('festival')) {
       onNavigateAdmin?.();
     }
-  };
+  }, [onNavigateBooking, onNavigatePrescriptions, onNavigateAdmin]);
 
   const renderSectionContent = () => {
     switch (section.type) {
@@ -104,7 +104,6 @@ export const SectionRenderer: React.FC<SectionRendererProps> = React.memo(({
         );
 
       default:
-        // Resilience requirement: "An unknown section type must render nothing and never crash."
         return null;
     }
   };
@@ -124,3 +123,5 @@ export const SectionRenderer: React.FC<SectionRendererProps> = React.memo(({
     </SectionWrapper>
   );
 });
+
+export default SectionRenderer;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { OfferStripItem } from '@types';
 import { useAppTheme } from '@context';
@@ -20,12 +20,12 @@ export const OfferStripSection: React.FC<OfferStripSectionProps> = React.memo(({
   const { t } = useTranslation();
   const offer = items?.[0];
 
-  if (!offer) return null;
-
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     triggerHaptic('light');
     onActionPress?.();
-  };
+  }, [onActionPress]);
+
+  if (!offer) return null;
 
   const offerText = offer.text ? t(offer.text, { defaultValue: offer.text }) : '';
 
@@ -102,3 +102,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default OfferStripSection;

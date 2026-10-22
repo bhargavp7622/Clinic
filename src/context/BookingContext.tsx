@@ -35,9 +35,7 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     try {
       const stored = await StorageService.getBookings();
       setBookings(stored);
-    } catch (e) {
-      console.warn('Error loading bookings', e);
-    } finally {
+    } catch {} finally {
       setIsLoading(false);
     }
   }, []);
@@ -118,9 +116,7 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       await StorageService.removeBooking(bookingId);
       setBookings(prev => prev.filter(b => b.id !== bookingId));
       triggerHaptic('light');
-    } catch (e) {
-      console.warn('Failed to cancel booking', e);
-    }
+    } catch {}
   }, []);
 
   const value = useMemo(

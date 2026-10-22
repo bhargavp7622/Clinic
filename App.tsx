@@ -36,9 +36,7 @@ export const App: React.FC = () => {
     const prepareApp = async () => {
       try {
         await Promise.all([initI18n(), initApiClient()]);
-      } catch (e) {
-        console.warn('Initialization error', e);
-      } finally {
+      } catch {} finally {
         setIsReady(true);
       }
     };

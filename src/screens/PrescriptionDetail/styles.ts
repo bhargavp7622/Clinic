@@ -82,7 +82,7 @@ export const createPrescriptionDetailStyles = (theme: AppTheme) =>
     },
     timingButton: {
       flex: 1,
-      minHeight: theme.minTouchTarget, // Accessible 44pt touch target
+      minHeight: theme.minTouchTarget,
       borderRadius: theme.borderRadius.md,
       borderWidth: 1.5,
       paddingHorizontal: 8,

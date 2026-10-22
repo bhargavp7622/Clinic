@@ -1,6 +1,3 @@
-/**
- * Debounce helper for search queries and rapidly fired events
- */
 export function debounce<T extends (...args: any[]) => void>(
   func: T,
   waitMs: number

@@ -114,7 +114,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = React.memo(({
             containerStyle,
           ]}
         >
-          {/* Drag Handle Bar with PanResponder */}
           <View {...panResponder.panHandlers} style={styles.dragHandleContainer}>
             <View
               style={[
@@ -124,7 +123,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = React.memo(({
             />
           </View>
 
-          {/* Sheet Body */}
           <View style={{ flexShrink: 1 }}>{children}</View>
         </Animated.View>
       </View>

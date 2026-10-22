@@ -1,8 +1,8 @@
 export interface Slot {
   id: string;
   doctorId: string;
-  startsAt: string; // e.g. "09:30 AM" or ISO string
-  endsAt: string;   // e.g. "10:00 AM" or ISO string
+  startsAt: string;
+  endsAt: string;
   available: boolean;
 }
 
@@ -14,7 +14,7 @@ export interface Booking {
   doctorName: string;
   specialty: string;
   slotId: string;
-  date: string; // YYYY-MM-DD
+  date: string;
   startsAt: string;
   endsAt: string;
   feeInr: number;

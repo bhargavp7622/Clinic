@@ -1,21 +1,21 @@
 import { LayoutTheme } from './config.types';
 
 export interface ThemeSpacing {
-  xs: number;  // 4
-  sm: number;  // 8
-  md: number;  // 16
-  lg: number;  // 24
-  xl: number;  // 32
-  xxl: number; // 40
+  xs: number;
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+  xxl: number;
 }
 
 export interface ThemeBorderRadius {
-  xs: number;  // 4
-  sm: number;  // 8
-  md: number;  // 12
-  lg: number;  // 16
-  xl: number;  // 24
-  full: number;// 9999
+  xs: number;
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+  full: number;
 }
 
 export interface ThemeTypographyVariant {
@@ -72,5 +72,5 @@ export interface AppTheme {
     floating: ThemeShadow;
   };
   isFestival: boolean;
-  minTouchTarget: number; // 44
+  minTouchTarget: number;
 }

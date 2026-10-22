@@ -7,6 +7,122 @@ import { Icon } from '@components';
 import { formatCurrencyInr, triggerHaptic } from '@utils';
 import { useTranslation } from 'react-i18next';
 
+interface ServiceCardItemProps {
+  service: ServiceGridItem;
+  theme: any;
+  t: (key: string) => string;
+  onPress?: (service: ServiceGridItem) => void;
+}
+
+const ServiceCardItem: React.FC<ServiceCardItemProps> = React.memo(({
+  service,
+  theme,
+  t,
+  onPress,
+}) => {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.85}
+      onPress={() => {
+        triggerHaptic('light');
+        onPress?.(service);
+      }}
+      style={[
+        styles.card,
+        {
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+          borderRadius: theme.borderRadius.lg,
+          ...theme.shadows.subtle,
+        },
+      ]}
+    >
+      <View style={[styles.imageContainer, { backgroundColor: theme.colors.divider }]}>
+        <Image
+          source={{ uri: service.imageUrl }}
+          style={styles.image}
+          resizeMode="cover"
+        />
+        {service.badge ? (
+          <View
+            style={[
+              styles.badge,
+              {
+                backgroundColor: theme.colors.primary,
+              },
+            ]}
+          >
+            <AppText variant="labelSmall" weight="800" color={theme.colors.surface}>
+              {service.badge}
+            </AppText>
+          </View>
+        ) : null}
+
+        {service.duration ? (
+          <View style={[styles.durationTag, { backgroundColor: theme.colors.overlay }]}>
+            <Icon name="clock" size={10} color={theme.colors.surface} />
+            <AppText variant="labelSmall" weight="600" color={theme.colors.surface}>
+              {service.duration}
+            </AppText>
+          </View>
+        ) : null}
+      </View>
+
+      <View style={styles.details}>
+        <AppText
+          variant="titleMedium"
+          weight="700"
+          numberOfLines={2}
+          style={{ minHeight: 36 }}
+        >
+          {service.name}
+        </AppText>
+
+        {service.testsCount ? (
+          <AppText
+            variant="bodySmall"
+            colorKey="textSecondary"
+            style={{ marginTop: 2, marginBottom: 8 }}
+          >
+            Includes {service.testsCount} key tests
+          </AppText>
+        ) : null}
+
+        <View style={styles.priceRow}>
+          <View>
+            <AppText variant="titleLarge" weight="800">
+              {formatCurrencyInr(service.priceInr)}
+            </AppText>
+            {service.originalPriceInr ? (
+              <AppText
+                variant="labelSmall"
+                colorKey="textSecondary"
+                style={{ textDecorationLine: 'line-through' }}
+              >
+                {formatCurrencyInr(service.originalPriceInr)}
+              </AppText>
+            ) : null}
+          </View>
+
+          <View
+            style={[
+              styles.addButton,
+              {
+                borderColor: theme.colors.primary,
+                backgroundColor: theme.colors.badgeBg,
+              },
+            ]}
+          >
+            <AppText variant="labelLarge" weight="800" colorKey="primary">
+              {t('common.add')}
+            </AppText>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+});
+
 interface ServiceGridSectionProps {
   items?: ServiceGridItem[];
   onServicePress?: (service: ServiceGridItem) => void;
@@ -24,109 +140,13 @@ export const ServiceGridSection: React.FC<ServiceGridSectionProps> = React.memo(
   return (
     <View style={[styles.grid, { paddingHorizontal: theme.spacing.md }]}>
       {items.map(service => (
-        <TouchableOpacity
+        <ServiceCardItem
           key={service.id}
-          activeOpacity={0.85}
-          onPress={() => {
-            triggerHaptic('light');
-            onServicePress?.(service);
-          }}
-          style={[
-            styles.card,
-            {
-              backgroundColor: theme.colors.surface,
-              borderColor: theme.colors.border,
-              borderRadius: theme.borderRadius.lg,
-              ...theme.shadows.subtle,
-            },
-          ]}
-        >
-          {/* Service Image with Zepto-style Badge */}
-          <View style={[styles.imageContainer, { backgroundColor: theme.colors.divider }]}>
-            <Image
-              source={{ uri: service.imageUrl }}
-              style={styles.image}
-              resizeMode="cover"
-            />
-            {service.badge ? (
-              <View
-                style={[
-                  styles.badge,
-                  {
-                    backgroundColor: theme.colors.primary,
-                  },
-                ]}
-              >
-                <AppText variant="labelSmall" weight="800" color={theme.colors.surface}>
-                  {service.badge}
-                </AppText>
-              </View>
-            ) : null}
-
-            {service.duration ? (
-              <View style={[styles.durationTag, { backgroundColor: theme.colors.overlay }]}>
-                <Icon name="clock" size={10} color={theme.colors.surface} />
-                <AppText variant="labelSmall" weight="600" color={theme.colors.surface}>
-                  {service.duration}
-                </AppText>
-              </View>
-            ) : null}
-          </View>
-
-          {/* Details */}
-          <View style={styles.details}>
-            <AppText
-              variant="titleMedium"
-              weight="700"
-              numberOfLines={2}
-              style={{ minHeight: 36 }}
-            >
-              {service.name}
-            </AppText>
-
-            {service.testsCount ? (
-              <AppText
-                variant="bodySmall"
-                colorKey="textSecondary"
-                style={{ marginTop: 2, marginBottom: 8 }}
-              >
-                Includes {service.testsCount} key tests
-              </AppText>
-            ) : null}
-
-            {/* Price & Add Row */}
-            <View style={styles.priceRow}>
-              <View>
-                <AppText variant="titleLarge" weight="800">
-                  {formatCurrencyInr(service.priceInr)}
-                </AppText>
-                {service.originalPriceInr ? (
-                  <AppText
-                    variant="labelSmall"
-                    colorKey="textSecondary"
-                    style={{ textDecorationLine: 'line-through' }}
-                  >
-                    {formatCurrencyInr(service.originalPriceInr)}
-                  </AppText>
-                ) : null}
-              </View>
-
-              <View
-                style={[
-                  styles.addBtn,
-                  {
-                    borderColor: theme.colors.primary,
-                    backgroundColor: theme.colors.surface,
-                  },
-                ]}
-              >
-                <AppText variant="labelSmall" weight="800" colorKey="primary">
-                  {t('common.book')}
-                </AppText>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
+          service={service}
+          theme={theme}
+          t={t}
+          onPress={onServicePress}
+        />
       ))}
     </View>
   );
@@ -137,18 +157,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
-    width: '100%',
   },
   card: {
-    flexBasis: '47.5%',
-    flexGrow: 1,
+    width: '48%',
     borderWidth: 1,
     overflow: 'hidden',
   },
   imageContainer: {
-    position: 'relative',
     width: '100%',
-    height: 105,
+    height: 110,
+    position: 'relative',
   },
   image: {
     width: '100%',
@@ -158,8 +176,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 6,
     left: 6,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
     borderRadius: 4,
   },
   durationTag: {
@@ -168,26 +186,26 @@ const styles = StyleSheet.create({
     left: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
+    gap: 4,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   details: {
     padding: 10,
-    flex: 1,
-    justifyContent: 'space-between',
   },
   priceRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 6,
+    alignItems: 'flex-end',
+    marginTop: 4,
   },
-  addBtn: {
-    borderWidth: 1.5,
+  addButton: {
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: 6,
+    borderWidth: 1.5,
   },
 });
+
+export default ServiceGridSection;

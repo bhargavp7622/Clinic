@@ -71,7 +71,6 @@ export const SuccessModal: React.FC<SuccessModalProps> = React.memo(({
             ...theme.shadows.floating,
           }}
         >
-          {/* Animated Celebration Icon */}
           <View
             style={{
               width: 80,
@@ -106,7 +105,6 @@ export const SuccessModal: React.FC<SuccessModalProps> = React.memo(({
             {t('booking.booking_success_desc')}
           </AppText>
 
-          {/* Details Card */}
           <View
             style={{
               backgroundColor: theme.colors.divider,

@@ -67,6 +67,5 @@ export const validateLayoutConfig = (config: any): ValidationResult => {
 
 export const sanitizeSections = (sections: SectionConfig[], knownTypes: string[]): SectionConfig[] => {
   if (!Array.isArray(sections)) return [];
-  // Skip unknown types as per requirement: "An unknown section type must render nothing and never crash."
   return sections.filter(sec => sec && knownTypes.includes(sec.type));
 };

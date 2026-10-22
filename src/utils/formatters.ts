@@ -1,7 +1,3 @@
-/**
- * Utility formatters for Indian locale currency (₹) and dates
- */
-
 export const formatCurrencyInr = (amount: number): string => {
   if (typeof amount !== 'number' || isNaN(amount)) {
     return '₹0';

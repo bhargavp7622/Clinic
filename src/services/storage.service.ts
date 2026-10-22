@@ -26,17 +26,14 @@ export const StorageService = {
   async saveCachedConfig(config: LayoutConfig): Promise<void> {
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.LAYOUT_CONFIG, JSON.stringify(config));
-    } catch (e) {
-      console.warn('Failed to cache layout config to storage', e);
-    }
+    } catch {}
   },
 
   async getCachedConfig(): Promise<LayoutConfig | null> {
     try {
       const data = await AsyncStorage.getItem(STORAGE_KEYS.LAYOUT_CONFIG);
       return data ? (JSON.parse(data) as LayoutConfig) : null;
-    } catch (e) {
-      console.warn('Failed to read cached layout config', e);
+    } catch {
       return null;
     }
   },
@@ -44,9 +41,7 @@ export const StorageService = {
   async saveActiveConfigMode(mode: 'normal' | 'festival'): Promise<void> {
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.CONFIG_MODE, mode);
-    } catch (e) {
-      console.warn('Failed to save config mode', e);
-    }
+    } catch {}
   },
 
   async getActiveConfigMode(): Promise<'normal' | 'festival'> {
@@ -74,8 +69,7 @@ export const StorageService = {
       const updated = [booking, ...filtered];
       await AsyncStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(updated));
       return updated;
-    } catch (e) {
-      console.warn('Failed to save booking', e);
+    } catch {
       return [];
     }
   },
@@ -85,9 +79,7 @@ export const StorageService = {
       const current = await this.getBookings();
       const updated = current.map(b => (b.id === bookingId ? { ...b, status, isOptimistic: false } : b));
       await AsyncStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(updated));
-    } catch (e) {
-      console.warn('Failed to update booking status', e);
-    }
+    } catch {}
   },
 
   async removeBooking(bookingId: string): Promise<void> {
@@ -95,9 +87,7 @@ export const StorageService = {
       const current = await this.getBookings();
       const updated = current.filter(b => b.id !== bookingId);
       await AsyncStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(updated));
-    } catch (e) {
-      console.warn('Failed to remove booking', e);
-    }
+    } catch {}
   },
 
   async getDoseHistory(): Promise<Record<string, boolean>> {
@@ -126,8 +116,7 @@ export const StorageService = {
       }
       await AsyncStorage.setItem(STORAGE_KEYS.DOSE_HISTORY, JSON.stringify(history));
       return history;
-    } catch (e) {
-      console.warn('Failed to update dose history', e);
+    } catch {
       return {};
     }
   },
@@ -144,9 +133,7 @@ export const StorageService = {
   async saveDevSettings(settings: DevSettings): Promise<void> {
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.DEV_SETTINGS, JSON.stringify(settings));
-    } catch (e) {
-      console.warn('Failed to save dev settings', e);
-    }
+    } catch {}
   },
 
   async getLanguage(): Promise<string> {
@@ -160,9 +147,7 @@ export const StorageService = {
   async saveLanguage(lang: string): Promise<void> {
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.LANGUAGE, lang);
-    } catch (e) {
-      console.warn('Failed to save language', e);
-    }
+    } catch {}
   },
 
   async clearAll(): Promise<void> {
@@ -173,8 +158,6 @@ export const StorageService = {
         AsyncStorage.removeItem(STORAGE_KEYS.BOOKINGS),
         AsyncStorage.removeItem(STORAGE_KEYS.DOSE_HISTORY),
       ]);
-    } catch (e) {
-      console.warn('Failed to clear storage', e);
-    }
+    } catch {}
   },
 };

@@ -2,7 +2,7 @@ export type BackgroundKind = 'color' | 'gradient' | 'image';
 
 export interface SectionBackground {
   kind: BackgroundKind;
-  value: string; // Hex color (e.g. '#FFFFFF'), gradient (e.g. '#0F766E,#14B8A6'), or image URI
+  value: string;
 }
 
 export interface FestivalConfig {
@@ -91,7 +91,7 @@ export interface OfferStripItem extends BaseSectionItem {
 
 export interface SectionConfig {
   id: string;
-  type: string; // 'hero_banner' | 'category_chips' | 'quick_actions' | 'service_grid' | 'doctor_carousel' | 'offer_strip' | unknown
+  type: string;
   background: SectionBackground;
   title?: string;
   items?: unknown[];

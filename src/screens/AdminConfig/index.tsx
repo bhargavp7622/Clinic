@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -16,6 +16,18 @@ import { changeLanguage } from '@/i18n';
 import { useTranslation } from 'react-i18next';
 import { createAdminStyles } from './styles';
 
+const LATENCY_OPTIONS = [
+  { ms: 0, labelKey: 'admin.latency_0' },
+  { ms: 1000, labelKey: 'admin.latency_1000' },
+  { ms: 3000, labelKey: 'admin.latency_3000' },
+];
+
+const LANGUAGE_OPTIONS: Array<{ code: 'en' | 'hi' | 'te'; label: string }> = [
+  { code: 'en', label: 'English' },
+  { code: 'hi', label: 'हिंदी' },
+  { code: 'te', label: 'తెలుగు' },
+];
+
 export const AdminConfigScreen: React.FC = React.memo(() => {
   const theme = useAppTheme();
   const styles = useMemo(() => createAdminStyles(theme), [theme]);
@@ -30,12 +42,22 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
     resetDevSettings,
   } = useNetwork();
 
-  const handleConfigSwitch = async (mode: 'normal' | 'festival') => {
+  const handleConfigSwitch = useCallback(async (mode: 'normal' | 'festival') => {
     triggerHaptic('medium');
     await switchConfigMode(mode);
-  };
+  }, [switchConfigMode]);
 
-  const handleResetCache = async () => {
+  const handleLatencyChange = useCallback((ms: number) => {
+    triggerHaptic('light');
+    setSimulatedLatency(ms);
+  }, [setSimulatedLatency]);
+
+  const handleLanguageChange = useCallback((code: 'en' | 'hi' | 'te') => {
+    triggerHaptic('light');
+    changeLanguage(code);
+  }, []);
+
+  const handleResetCache = useCallback(async () => {
     Alert.alert(
       t('admin.reset_confirm_title'),
       t('admin.reset_confirm_message'),
@@ -54,14 +76,30 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
         },
       ]
     );
-  };
+  }, [resetDevSettings, switchConfigMode, t]);
+
+  const jsonSummary = useMemo(() => {
+    return JSON.stringify(
+      {
+        version: config.version,
+        theme: config.theme,
+        sections: config.sections.map(s => ({
+          id: s.id,
+          type: s.type,
+          background: s.background,
+          itemsCount: s.items?.length,
+        })),
+      },
+      null,
+      2
+    );
+  }, [config]);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <AppHeader title={t('admin.title')} />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* 1. Runtime Config Switcher (Normal Day vs Festival Day) */}
         <View style={styles.sectionCard}>
           <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
             {t('admin.config_switcher')}
@@ -135,7 +173,6 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
           ) : null}
         </View>
 
-        {/* 2. Latency Switcher */}
         <View style={styles.sectionCard}>
           <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
             {t('admin.latency_title')}
@@ -145,19 +182,12 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
           </AppText>
 
           <View style={styles.buttonGrid}>
-            {[
-              { ms: 0, labelKey: 'admin.latency_0' },
-              { ms: 1000, labelKey: 'admin.latency_1000' },
-              { ms: 3000, labelKey: 'admin.latency_3000' },
-            ].map(item => {
+            {LATENCY_OPTIONS.map(item => {
               const isSelected = devSettings.simulatedLatencyMs === item.ms;
               return (
                 <TouchableOpacity
                   key={item.ms}
-                  onPress={() => {
-                    triggerHaptic('light');
-                    setSimulatedLatency(item.ms);
-                  }}
+                  onPress={() => handleLatencyChange(item.ms)}
                   style={[
                     styles.switchOption,
                     {
@@ -179,7 +209,6 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
           </View>
         </View>
 
-        {/* 3. Failure & Resilience Toggles */}
         <View style={styles.sectionCard}>
           <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
             {t('admin.resilience_switches')}
@@ -188,7 +217,6 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
             {t('admin.resilience_desc')}
           </AppText>
 
-          {/* Force Network Failure (503) */}
           <View style={styles.toggleRow}>
             <View style={styles.toggleInfo}>
               <AppText variant="titleMedium" weight="700">
@@ -205,7 +233,6 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
             />
           </View>
 
-          {/* Slot Taken Conflict (409) */}
           <View style={styles.toggleRow}>
             <View style={styles.toggleInfo}>
               <AppText variant="titleMedium" weight="700">
@@ -223,7 +250,6 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
           </View>
         </View>
 
-        {/* 4. Language Switcher */}
         <View style={styles.sectionCard}>
           <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
             {t('admin.language')}
@@ -233,19 +259,12 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
           </AppText>
 
           <View style={styles.buttonGrid}>
-            {[
-              { code: 'en', label: 'English' },
-              { code: 'hi', label: 'हिंदी' },
-              { code: 'te', label: 'తెలుగు' },
-            ].map(item => {
+            {LANGUAGE_OPTIONS.map(item => {
               const isSelected = i18n.language === item.code;
               return (
                 <TouchableOpacity
                   key={item.code}
-                  onPress={() => {
-                    triggerHaptic('light');
-                    changeLanguage(item.code as any);
-                  }}
+                  onPress={() => handleLanguageChange(item.code)}
                   style={[
                     styles.switchOption,
                     {
@@ -267,7 +286,6 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
           </View>
         </View>
 
-        {/* 5. Live Remote Config JSON Inspector */}
         <View style={styles.sectionCard}>
           <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
             {t('admin.live_json')}
@@ -278,25 +296,11 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
 
           <ScrollView style={styles.jsonPreviewBox} nestedScrollEnabled>
             <AppText variant="bodySmall" colorKey="primary" style={{ fontFamily: 'Courier' }}>
-              {JSON.stringify(
-                {
-                  version: config.version,
-                  theme: config.theme,
-                  sections: config.sections.map(s => ({
-                    id: s.id,
-                    type: s.type,
-                    background: s.background,
-                    itemsCount: s.items?.length,
-                  })),
-                },
-                null,
-                2
-              )}
+              {jsonSummary}
             </AppText>
           </ScrollView>
         </View>
 
-        {/* 6. Reset Storage */}
         <Button
           title={t('admin.clear_storage')}
           onPress={handleResetCache}

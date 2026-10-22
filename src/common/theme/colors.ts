@@ -1,10 +1,4 @@
-/**
- * Centralized Theme Colors Definition
- * All color tokens are defined here to eliminate manual hardcoded colors across the app.
- */
-
 export const PALETTE = {
-  // Medical Teal & Emerald
   teal900: '#134E4A',
   teal800: '#115E59',
   teal700: '#0F766E',
@@ -13,7 +7,6 @@ export const PALETTE = {
   teal100: '#CCFBF1',
   teal50: '#F0FDFA',
 
-  // Diwali Saffron, Marigold, Gold
   saffron900: '#7C2D12',
   saffron800: '#9A3412',
   saffron700: '#C2410C',
@@ -30,7 +23,6 @@ export const PALETTE = {
   gold100: '#FEF3C7',
   gold50: '#FFFBEB',
 
-  // Neutrals / Slate
   slate900: '#0F172A',
   slate800: '#1E293B',
   slate700: '#334155',
@@ -44,7 +36,6 @@ export const PALETTE = {
   white: '#FFFFFF',
   black: '#000000',
 
-  // Status & Feedback
   green700: '#15803D',
   green600: '#16A34A',
   green500: '#22C55E',
@@ -65,7 +56,6 @@ export const PALETTE = {
   sky500: '#0EA5E9',
   sky100: '#E0F2FE',
 
-  // Translucent Overlays
   overlayDark: 'rgba(15, 23, 42, 0.55)',
   overlaySoft: 'rgba(0, 0, 0, 0.25)',
   overlayLight: 'rgba(255, 255, 255, 0.15)',

@@ -7,6 +7,89 @@ import { Icon } from '@components';
 import { triggerHaptic } from '@utils';
 import { useTranslation } from 'react-i18next';
 
+interface QuickActionTileProps {
+  item: QuickActionItem;
+  theme: any;
+  t: (key: string, options?: any) => string;
+  onPress?: (action: string) => void;
+}
+
+const QuickActionTile: React.FC<QuickActionTileProps> = React.memo(({
+  item,
+  theme,
+  t,
+  onPress,
+}) => {
+  const translatedLabel = item.label ? t(item.label, { defaultValue: item.label }) : '';
+  const translatedSublabel = item.sublabel ? t(item.sublabel, { defaultValue: item.sublabel }) : '';
+  const translatedBadge = item.badge ? t(item.badge, { defaultValue: item.badge }) : '';
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => {
+        triggerHaptic('light');
+        onPress?.(item.action);
+      }}
+      style={[
+        styles.tile,
+        {
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.borderRadius.lg,
+          borderColor: theme.colors.border,
+          padding: theme.spacing.md,
+          ...theme.shadows.subtle,
+        },
+      ]}
+    >
+      {translatedBadge ? (
+        <View
+          style={[
+            styles.badge,
+            {
+              backgroundColor: theme.colors.badgeBg,
+            },
+          ]}
+        >
+          <AppText variant="labelSmall" weight="800" colorKey="badgeText">
+            {translatedBadge}
+          </AppText>
+        </View>
+      ) : null}
+
+      <View
+        style={[
+          styles.iconWrapper,
+          {
+            backgroundColor: theme.colors.badgeBg,
+          },
+        ]}
+      >
+        <Icon
+          name={item.icon}
+          size={22}
+          color={theme.colors.primary}
+        />
+      </View>
+
+      <AppText
+        variant="titleMedium"
+        weight="700"
+        colorKey="textPrimary"
+        style={{ marginBottom: 2 }}
+      >
+        {translatedLabel}
+      </AppText>
+
+      {translatedSublabel ? (
+        <AppText variant="bodySmall" colorKey="textSecondary">
+          {translatedSublabel}
+        </AppText>
+      ) : null}
+    </TouchableOpacity>
+  );
+});
+
 interface QuickActionsSectionProps {
   items?: QuickActionItem[];
   onActionPress?: (action: string) => void;
@@ -23,77 +106,15 @@ export const QuickActionsSection: React.FC<QuickActionsSectionProps> = React.mem
 
   return (
     <View style={[styles.grid, { paddingHorizontal: theme.spacing.md }]}>
-      {items.map(item => {
-        const translatedLabel = item.label ? t(item.label, { defaultValue: item.label }) : '';
-        const translatedSublabel = item.sublabel ? t(item.sublabel, { defaultValue: item.sublabel }) : '';
-        const translatedBadge = item.badge ? t(item.badge, { defaultValue: item.badge }) : '';
-
-        return (
-          <TouchableOpacity
-            key={item.id}
-            activeOpacity={0.8}
-            onPress={() => {
-              triggerHaptic('light');
-              onActionPress?.(item.action);
-            }}
-            style={[
-              styles.tile,
-              {
-                backgroundColor: theme.colors.surface,
-                borderRadius: theme.borderRadius.lg,
-                borderColor: theme.colors.border,
-                padding: theme.spacing.md,
-                ...theme.shadows.subtle,
-              },
-            ]}
-          >
-            {translatedBadge ? (
-              <View
-                style={[
-                  styles.badge,
-                  {
-                    backgroundColor: theme.colors.badgeBg,
-                  },
-                ]}
-              >
-                <AppText variant="labelSmall" weight="800" colorKey="badgeText">
-                  {translatedBadge}
-                </AppText>
-              </View>
-            ) : null}
-
-            <View
-              style={[
-                styles.iconWrapper,
-                {
-                  backgroundColor: theme.colors.badgeBg,
-                },
-              ]}
-            >
-              <Icon
-                name={item.icon}
-                size={22}
-                color={theme.colors.primary}
-              />
-            </View>
-
-            <AppText
-              variant="titleMedium"
-              weight="700"
-              colorKey="textPrimary"
-              style={{ marginBottom: 2 }}
-            >
-              {translatedLabel}
-            </AppText>
-
-            {translatedSublabel ? (
-              <AppText variant="bodySmall" colorKey="textSecondary">
-                {translatedSublabel}
-              </AppText>
-            ) : null}
-          </TouchableOpacity>
-        );
-      })}
+      {items.map(item => (
+        <QuickActionTile
+          key={item.id}
+          item={item}
+          theme={theme}
+          t={t}
+          onPress={onActionPress}
+        />
+      ))}
     </View>
   );
 });
@@ -130,3 +151,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
 });
+
+export default QuickActionsSection;

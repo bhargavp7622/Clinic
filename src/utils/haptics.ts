@@ -18,10 +18,7 @@ export const triggerHaptic = (type: 'light' | 'medium' | 'success' | 'warning' =
           break;
       }
     } else {
-      // iOS
       Vibration.vibrate();
     }
-  } catch {
-    // Non-blocking fallback
-  }
+  } catch {}
 };

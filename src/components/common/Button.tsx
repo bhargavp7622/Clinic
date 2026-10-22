@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { TouchableOpacity, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
 import { useAppTheme } from '@context';
 import { triggerHaptic } from '@utils';
@@ -31,15 +31,15 @@ export const Button: React.FC<ButtonProps> = React.memo(({
 }) => {
   const theme = useAppTheme();
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     if (disabled || loading) return;
     triggerHaptic('light');
     onPress();
-  };
+  }, [disabled, loading, onPress]);
 
-  const getContainerStyle = (): ViewStyle => {
+  const containerStyle = useMemo((): ViewStyle => {
     const base: ViewStyle = {
-      minHeight: theme.minTouchTarget, // Accessible 44pt minimum
+      minHeight: theme.minTouchTarget,
       borderRadius: theme.borderRadius.md,
       paddingHorizontal: theme.spacing.md,
       paddingVertical: theme.spacing.sm,
@@ -83,9 +83,9 @@ export const Button: React.FC<ButtonProps> = React.memo(({
       default:
         return base;
     }
-  };
+  }, [disabled, theme, variant]);
 
-  const getTextColor = (): string => {
+  const textColor = useMemo((): string => {
     switch (variant) {
       case 'primary':
         return theme.colors.surface;
@@ -97,7 +97,7 @@ export const Button: React.FC<ButtonProps> = React.memo(({
       case 'text':
         return theme.colors.primary;
     }
-  };
+  }, [theme, variant]);
 
   return (
     <TouchableOpacity
@@ -106,7 +106,7 @@ export const Button: React.FC<ButtonProps> = React.memo(({
       activeOpacity={0.75}
       onPress={handlePress}
       disabled={disabled || loading}
-      style={[getContainerStyle(), style]}
+      style={[containerStyle, style]}
       testID={testID}
     >
       {loading ? (
@@ -120,7 +120,7 @@ export const Button: React.FC<ButtonProps> = React.memo(({
           <AppText
             variant="labelLarge"
             weight="700"
-            color={getTextColor()}
+            color={textColor}
             style={[icon ? { marginLeft: theme.spacing.sm } : undefined, textStyle]}
           >
             {title}

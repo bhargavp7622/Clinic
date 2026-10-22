@@ -18,4 +18,4 @@ export const BORDER_RADIUS: ThemeBorderRadius = {
   full: 9999,
 };
 
-export const MIN_TOUCH_TARGET = 44; // Accessible tap target minimum
+export const MIN_TOUCH_TARGET = 44;

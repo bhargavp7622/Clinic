@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import {
   View,
   ImageBackground,
@@ -47,7 +47,7 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = React.memo(({
     ]).start();
   }, [fadeAnim, slideAnim]);
 
-  const renderBackground = () => {
+  const backgroundNode = useMemo(() => {
     if (background.kind === 'gradient') {
       const colors = background.value.split(',').map(c => c.trim());
       const startColor = colors[0] || theme.colors.primary;
@@ -82,7 +82,7 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = React.memo(({
 
     const bgColor = background.kind === 'color' ? background.value : theme.colors.surface;
     return <View style={[StyleSheet.absoluteFill, { backgroundColor: bgColor }]} />;
-  };
+  }, [background, theme, id]);
 
   const isGradient = background.kind === 'gradient';
   const displayTitle = title ? t(title, { defaultValue: title }) : '';
@@ -98,7 +98,7 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = React.memo(({
         style,
       ]}
     >
-      {renderBackground()}
+      {backgroundNode}
 
       {displayTitle ? (
         <View style={[styles.headerContainer, { paddingHorizontal: theme.spacing.md }]}>
@@ -131,3 +131,5 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
+
+export default SectionWrapper;

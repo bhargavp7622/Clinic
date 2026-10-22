@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ScrollView, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { CategoryChipItem } from '@types';
 import { useAppTheme } from '@context';
@@ -20,13 +20,13 @@ export const CategoryChipsSection: React.FC<CategoryChipsSectionProps> = React.m
   const { t } = useTranslation();
   const [selectedKey, setSelectedKey] = useState<string>('all');
 
-  if (!items || items.length === 0) return null;
-
-  const handlePress = (item: CategoryChipItem) => {
+  const handlePress = useCallback((item: CategoryChipItem) => {
     triggerHaptic('light');
     setSelectedKey(item.categoryKey);
     onSelectCategory?.(item);
-  };
+  }, [onSelectCategory]);
+
+  if (!items || items.length === 0) return null;
 
   return (
     <ScrollView
@@ -56,7 +56,7 @@ export const CategoryChipsSection: React.FC<CategoryChipsSectionProps> = React.m
                   ? theme.colors.primary
                   : theme.colors.border,
                 borderRadius: theme.borderRadius.full,
-                minHeight: theme.minTouchTarget, // Accessible 44pt tap target
+                minHeight: theme.minTouchTarget,
                 ...theme.shadows.subtle,
               },
             ]}
@@ -97,3 +97,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
+
+export default CategoryChipsSection;

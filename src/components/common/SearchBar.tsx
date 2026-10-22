@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, TextInput, TouchableOpacity, ViewStyle } from 'react-native';
 import { useAppTheme } from '@context';
 import { Icon } from '@components';
@@ -27,28 +27,27 @@ export const SearchBar: React.FC<SearchBarProps> = React.memo(({
     onSearchChange(debouncedQuery);
   }, [debouncedQuery, onSearchChange]);
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     setText('');
     onSearchChange('');
-  };
+  }, [onSearchChange]);
+
+  const containerStyle = useMemo((): ViewStyle => {
+    return {
+      backgroundColor: theme.colors.surface,
+      borderRadius: theme.borderRadius.full,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: theme.spacing.md,
+      minHeight: theme.minTouchTarget,
+      ...theme.shadows.subtle,
+    };
+  }, [theme]);
 
   return (
-    <View
-      style={[
-        {
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.full,
-          borderWidth: 1,
-          borderColor: theme.colors.border,
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: theme.spacing.md,
-          minHeight: theme.minTouchTarget, // Accessible 44pt target
-          ...theme.shadows.subtle,
-        },
-        style,
-      ]}
-    >
+    <View style={[containerStyle, style]}>
       <Icon name="search" size={18} color={theme.colors.textSecondary} />
       <TextInput
         value={text}

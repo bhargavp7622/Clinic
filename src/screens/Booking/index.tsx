@@ -27,6 +27,82 @@ import { formatCurrencyInr, getNextDays, triggerHaptic } from '@utils';
 import { useTranslation } from 'react-i18next';
 import { createBookingStyles } from './styles';
 
+interface DoctorCardItemProps {
+  item: Doctor;
+  theme: any;
+  styles: any;
+  t: (key: string) => string;
+  onBook: (doctor: Doctor) => void;
+}
+
+const DoctorCardItem: React.FC<DoctorCardItemProps> = React.memo(({
+  item,
+  theme,
+  styles,
+  t,
+  onBook,
+}) => {
+  return (
+    <View style={styles.doctorCard}>
+      <View style={styles.docHeaderRow}>
+        <Image
+          source={{ uri: item.photoUrl }}
+          style={[styles.docAvatar, { borderColor: theme.colors.border }]}
+          resizeMode="cover"
+        />
+        <View style={styles.docInfo}>
+          <AppText variant="titleMedium" weight="700">
+            {item.name}
+          </AppText>
+          <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+            {item.specialty}
+          </AppText>
+          <View style={styles.docMetaRow}>
+            <View style={styles.metaItem}>
+              <Icon name="star" size={13} color={theme.colors.warning} />
+              <AppText variant="labelSmall" weight="700" colorKey="warning">
+                {item.rating.toFixed(1)}
+              </AppText>
+            </View>
+            <AppText variant="labelSmall" colorKey="textSecondary">•</AppText>
+            <View style={styles.metaItem}>
+              <Icon name="activity" size={12} color={theme.colors.textSecondary} />
+              <AppText variant="labelSmall" colorKey="textSecondary">
+                {item.experienceYears} yrs {t('common.experience')}
+              </AppText>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.clinicRow}>
+        <Icon name="map-pin" size={13} color={theme.colors.textSecondary} />
+        <AppText variant="bodySmall" colorKey="textSecondary" numberOfLines={1} style={{ flex: 1, marginLeft: 4 }}>
+          {item.clinicLocation}
+        </AppText>
+      </View>
+
+      <View style={styles.docFooter}>
+        <View>
+          <AppText variant="labelSmall" colorKey="textSecondary">
+            {t('common.fee')}
+          </AppText>
+          <AppText variant="titleLarge" weight="800">
+            {formatCurrencyInr(item.feeInr)}
+          </AppText>
+        </View>
+
+        <Button
+          title={t('common.book_now')}
+          onPress={() => onBook(item)}
+          variant="primary"
+          icon={<Icon name="calendar-plus" size={15} color={theme.colors.surface} />}
+        />
+      </View>
+    </View>
+  );
+});
+
 export const BookingScreen: React.FC = React.memo(() => {
   const route = useRoute<any>();
   const theme = useAppTheme();
@@ -39,6 +115,8 @@ export const BookingScreen: React.FC = React.memo(() => {
 
   const [searchQuery, setSearchQuery] = useState<string>(preselectedQuery);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const pageSize = 4;
   const [isLoadingDoctors, setIsLoadingDoctors] = useState<boolean>(true);
   const [errorDoctors, setErrorDoctors] = useState<string | null>(null);
 
@@ -61,6 +139,7 @@ export const BookingScreen: React.FC = React.memo(() => {
     try {
       const res = await MockApiClient.getDoctors({ search: query });
       setDoctors(res.doctors);
+      setPage(1);
     } catch (err: any) {
       setErrorDoctors(err?.message || 'Failed to fetch doctors');
     } finally {
@@ -71,6 +150,16 @@ export const BookingScreen: React.FC = React.memo(() => {
   useEffect(() => {
     fetchDoctors(searchQuery);
   }, [searchQuery, fetchDoctors]);
+
+  const paginatedDoctors = useMemo(() => {
+    return doctors.slice(0, page * pageSize);
+  }, [doctors, page, pageSize]);
+
+  const handleLoadMore = useCallback(() => {
+    if (page * pageSize < doctors.length) {
+      setPage(p => p + 1);
+    }
+  }, [page, pageSize, doctors.length]);
 
   const handleOpenSlots = useCallback(
     async (doctor: Doctor) => {
@@ -158,73 +247,25 @@ export const BookingScreen: React.FC = React.memo(() => {
     return slots.filter(s => s.startsAt.includes('PM'));
   }, [slots]);
 
-  const renderDoctorItem = ({ item }: { item: Doctor }) => {
-    return (
-      <View style={styles.doctorCard}>
-        <View style={styles.docHeaderRow}>
-          <Image
-            source={{ uri: item.photoUrl }}
-            style={[styles.docAvatar, { borderColor: theme.colors.border }]}
-            resizeMode="cover"
-          />
-          <View style={styles.docInfo}>
-            <AppText variant="titleMedium" weight="700">
-              {item.name}
-            </AppText>
-            <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
-              {item.specialty}
-            </AppText>
-            <View style={styles.docMetaRow}>
-              <View style={styles.metaItem}>
-                <Icon name="star" size={13} color={theme.colors.warning} />
-                <AppText variant="labelSmall" weight="700" colorKey="warning">
-                  {item.rating.toFixed(1)}
-                </AppText>
-              </View>
-              <AppText variant="labelSmall" colorKey="textSecondary">•</AppText>
-              <View style={styles.metaItem}>
-                <Icon name="activity" size={12} color={theme.colors.textSecondary} />
-                <AppText variant="labelSmall" colorKey="textSecondary">
-                  {item.experienceYears} yrs {t('common.experience')}
-                </AppText>
-              </View>
-            </View>
-          </View>
-        </View>
+  const keyExtractor = useCallback((item: Doctor) => item.id, []);
 
-        <View style={styles.clinicRow}>
-          <Icon name="map-pin" size={13} color={theme.colors.textSecondary} />
-          <AppText variant="bodySmall" colorKey="textSecondary" numberOfLines={1} style={{ flex: 1, marginLeft: 4 }}>
-            {item.clinicLocation}
-          </AppText>
-        </View>
-
-        <View style={styles.docFooter}>
-          <View>
-            <AppText variant="labelSmall" colorKey="textSecondary">
-              {t('common.fee')}
-            </AppText>
-            <AppText variant="titleLarge" weight="800">
-              {formatCurrencyInr(item.feeInr)}
-            </AppText>
-          </View>
-
-          <Button
-            title={t('common.book_now')}
-            onPress={() => handleOpenSlots(item)}
-            variant="primary"
-            icon={<Icon name="calendar-plus" size={15} color={theme.colors.surface} />}
-          />
-        </View>
-      </View>
-    );
-  };
+  const renderDoctorItem = useCallback(
+    ({ item }: { item: Doctor }) => (
+      <DoctorCardItem
+        item={item}
+        theme={theme}
+        styles={styles}
+        t={t}
+        onBook={handleOpenSlots}
+      />
+    ),
+    [theme, styles, t, handleOpenSlots]
+  );
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <AppHeader title={t('booking.title')} />
 
-      {/* Debounced Search */}
       <View style={styles.searchWrapper}>
         <SearchBar
           initialValue={searchQuery}
@@ -233,7 +274,6 @@ export const BookingScreen: React.FC = React.memo(() => {
         />
       </View>
 
-      {/* Interactive Date Selection Strip */}
       <View style={styles.dateStripContainer}>
         <AppText variant="labelSmall" colorKey="textSecondary" style={{ paddingHorizontal: theme.spacing.md, marginBottom: 8 }}>
           {t('booking.select_date')}
@@ -280,7 +320,6 @@ export const BookingScreen: React.FC = React.memo(() => {
         </ScrollView>
       </View>
 
-      {/* Doctors List */}
       {isLoadingDoctors ? (
         <View style={{ padding: 16, gap: 14 }}>
           <DoctorCardSkeleton />
@@ -304,15 +343,21 @@ export const BookingScreen: React.FC = React.memo(() => {
         />
       ) : (
         <FlatList
-          data={doctors}
-          keyExtractor={item => item.id}
+          data={paginatedDoctors}
+          keyExtractor={keyExtractor}
           renderItem={renderDoctorItem}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={6}
+          windowSize={5}
+          initialNumToRender={4}
+          updateCellsBatchingPeriod={50}
         />
       )}
 
-      {/* Gesture-driven PanResponder BottomSheet for Slot Selection */}
       <BottomSheet visible={isSheetVisible} onClose={() => setIsSheetVisible(false)}>
         {selectedDoctor ? (
           <View>
@@ -341,7 +386,6 @@ export const BookingScreen: React.FC = React.memo(() => {
                 />
               ) : (
                 <>
-                  {/* Morning Slots */}
                   {morningSlots.length > 0 ? (
                     <>
                       <AppText variant="titleMedium" weight="700" style={{ marginBottom: 10, marginTop: 6 }}>
@@ -394,7 +438,6 @@ export const BookingScreen: React.FC = React.memo(() => {
                     </>
                   ) : null}
 
-                  {/* Evening Slots */}
                   {eveningSlots.length > 0 ? (
                     <>
                       <AppText variant="titleMedium" weight="700" style={{ marginBottom: 10, marginTop: 6 }}>
@@ -474,7 +517,6 @@ export const BookingScreen: React.FC = React.memo(() => {
         ) : null}
       </BottomSheet>
 
-      {/* Success Modal */}
       <SuccessModal
         visible={isSuccessModalVisible}
         booking={confirmedBooking}

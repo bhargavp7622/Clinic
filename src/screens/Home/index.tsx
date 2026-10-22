@@ -84,10 +84,8 @@ export const HomeScreen: React.FC = React.memo(() => {
         barStyle={theme.isFestival ? 'dark-content' : 'light-content'}
       />
 
-      {/* Offline / Resilience Status Banner */}
       <OfflineBanner onAdminPress={handleNavigateAdmin} />
 
-      {/* Shrinking & Reactive Animated Header */}
       <Animated.View
         style={[
           styles.headerWrapper,
@@ -96,7 +94,6 @@ export const HomeScreen: React.FC = React.memo(() => {
           },
         ]}
       >
-        {/* Festival Badge Strip if festival config active */}
         {theme.isFestival && config.theme.festival ? (
           <TouchableOpacity
             activeOpacity={0.9}
@@ -110,7 +107,6 @@ export const HomeScreen: React.FC = React.memo(() => {
           </TouchableOpacity>
         ) : null}
 
-        {/* Top Branding & Clinic Location Bar */}
         <View style={styles.topBar}>
           <View style={styles.locationContainer}>
             <View style={styles.brandTitleRow}>
@@ -132,7 +128,6 @@ export const HomeScreen: React.FC = React.memo(() => {
             </View>
           </View>
 
-          {/* Admin & Resilience Live Switcher Button */}
           <View style={styles.headerActions}>
             <TouchableOpacity
               activeOpacity={0.7}
@@ -154,7 +149,6 @@ export const HomeScreen: React.FC = React.memo(() => {
           </View>
         </View>
 
-        {/* Shrinking Debounced Search Bar */}
         <Animated.View
           style={[
             styles.searchContainer,
@@ -172,7 +166,6 @@ export const HomeScreen: React.FC = React.memo(() => {
         </Animated.View>
       </Animated.View>
 
-      {/* Main Scrollable Content Band Container */}
       <Animated.ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
