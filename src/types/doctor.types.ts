@@ -1,0 +1,14 @@
+export interface Doctor {
+  id: string;
+  name: string;
+  specialty: string;
+  photoUrl: string;
+  feeInr: number;
+  languages: string[];
+  rating: number;
+  experienceYears: number;
+  clinicName: string;
+  clinicLocation: string;
+  about?: string;
+  availableDays?: string[];
+}
