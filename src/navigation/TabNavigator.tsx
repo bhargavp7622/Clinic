@@ -1,13 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MainTabParamList } from '@/types/navigation.types';
-import { HomeScreen } from '@/screens/Home';
-import { BookingsScreen } from '@/screens/Bookings';
-import { PrescriptionsScreen } from '@/screens/Prescriptions';
-import { ProfileScreen } from '@/screens/Profile';
-import { useAppTheme } from '@/context/ThemeContext';
-import { useConfig } from '@/context/ConfigContext';
-import { Icon } from '@/components/icons/Icon';
+import { MainTabParamList } from '@types';
+import { HomeScreen, BookingsScreen, PrescriptionsScreen, ProfileScreen } from '@screens';
+import { useAppTheme, useConfig } from '@context';
+import { Icon } from '@components';
 import { Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 

@@ -4,8 +4,8 @@ import {
   DevSettings,
   DEFAULT_DEV_SETTINGS,
   StorageService,
-} from '@/services/storage.service';
-import { updateApiClientDevSettings } from '@/api/mockApiClient';
+} from '@services';
+import { updateApiClientDevSettings } from '@api';
 
 interface NetworkContextType {
   isConnected: boolean;

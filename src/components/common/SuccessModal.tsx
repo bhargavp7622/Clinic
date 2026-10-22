@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Modal, Animated } from 'react-native';
-import { useAppTheme } from '@/context/ThemeContext';
+import { useAppTheme } from '@context';
 import { Button } from './Button';
 import { AppText } from './AppText';
-import { Icon } from '@/components/icons/Icon';
-import { Booking } from '@/types/booking.types';
-import { formatCurrencyInr } from '@/utils/formatters';
+import { Icon } from '@components';
+import { Booking } from '@types';
+import { formatCurrencyInr } from '@utils';
 import { useTranslation } from 'react-i18next';
 
 interface SuccessModalProps {

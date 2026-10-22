@@ -7,18 +7,14 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAppTheme } from '@/context/ThemeContext';
-import { useConfig } from '@/context/ConfigContext';
-import { useNetwork } from '@/context/NetworkContext';
-import { createAdminStyles } from './styles';
-import { Button } from '@/components/common/Button';
-import { AppText } from '@/components/common/AppText';
-import { AppHeader } from '@/components/common/AppHeader';
-import { Icon } from '@/components/icons/Icon';
-import { StorageService } from '@/services/storage.service';
-import { triggerHaptic } from '@/utils/haptics';
+import { useAppTheme, useConfig, useNetwork } from '@context';
+import { AppHeader, AppText, Button } from '@common';
+import { Icon } from '@components';
+import { StorageService } from '@services';
+import { triggerHaptic } from '@utils';
 import { changeLanguage } from '@/i18n';
 import { useTranslation } from 'react-i18next';
+import { createAdminStyles } from './styles';
 
 export const AdminConfigScreen: React.FC = React.memo(() => {
   const theme = useAppTheme();

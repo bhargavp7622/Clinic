@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import { LayoutTheme } from '@/types/config.types';
-import { AppTheme } from '@/types/theme.types';
-import { buildAppTheme } from '@/common/theme';
+import { LayoutTheme, AppTheme } from '@types';
+import { buildAppTheme } from '@theme';
 
 interface ThemeContextType {
   theme: AppTheme;

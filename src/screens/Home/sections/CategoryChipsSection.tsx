@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { ScrollView, TouchableOpacity, StyleSheet, View } from 'react-native';
-import { CategoryChipItem } from '@/types/config.types';
-import { useAppTheme } from '@/context/ThemeContext';
-import { AppText } from '@/components/common/AppText';
-import { Icon } from '@/components/icons/Icon';
-import { triggerHaptic } from '@/utils/haptics';
+import { CategoryChipItem } from '@types';
+import { useAppTheme } from '@context';
+import { AppText } from '@common';
+import { Icon } from '@components';
+import { triggerHaptic } from '@utils';
 import { useTranslation } from 'react-i18next';
 
 interface CategoryChipsSectionProps {

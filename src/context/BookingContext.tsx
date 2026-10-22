@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { Booking, CreateBookingPayload } from '@/types/booking.types';
-import { MockApiClient, ApiError } from '@/api/mockApiClient';
-import { StorageService } from '@/services/storage.service';
-import { triggerHaptic } from '@/utils/haptics';
+import { Booking, CreateBookingPayload } from '@types';
+import { MockApiClient, ApiError } from '@api';
+import { StorageService } from '@services';
+import { triggerHaptic } from '@utils';
 
 interface BookingContextType {
   bookings: Booking[];

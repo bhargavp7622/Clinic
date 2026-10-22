@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, ViewStyle } from 'react-native';
-import { useAppTheme } from '@/context/ThemeContext';
+import { useAppTheme } from '@context';
 import { Button } from './Button';
 import { AppText } from './AppText';
-import { Icon, IconName } from '@/components/icons/Icon';
+import { Icon, IconName } from '@components';
 
 interface EmptyStateProps {
   iconName?: IconName;

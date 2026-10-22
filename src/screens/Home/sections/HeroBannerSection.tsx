@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
-import { HeroBannerItem } from '@/types/config.types';
-import { useAppTheme } from '@/context/ThemeContext';
-import { Button } from '@/components/common/Button';
-import { AppText } from '@/components/common/AppText';
-import { Icon } from '@/components/icons/Icon';
+import { HeroBannerItem } from '@types';
+import { useAppTheme } from '@context';
+import { Button, AppText } from '@common';
+import { Icon } from '@components';
 import { useTranslation } from 'react-i18next';
 
 interface HeroBannerSectionProps {

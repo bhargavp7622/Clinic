@@ -1,12 +1,10 @@
 import React from 'react';
 import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@/types/navigation.types';
+import { RootStackParamList } from '@types';
+import { BookingScreen, PrescriptionDetailScreen, AdminConfigScreen } from '@screens';
+import { useAppTheme } from '@context';
 import { TabNavigator } from './TabNavigator';
-import { BookingScreen } from '@/screens/Booking';
-import { PrescriptionDetailScreen } from '@/screens/PrescriptionDetail';
-import { AdminConfigScreen } from '@/screens/AdminConfig';
-import { useAppTheme } from '@/context/ThemeContext';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

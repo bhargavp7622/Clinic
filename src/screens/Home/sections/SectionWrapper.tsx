@@ -7,9 +7,9 @@ import {
   ViewStyle,
 } from 'react-native';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
-import { SectionBackground } from '@/types/config.types';
-import { useAppTheme } from '@/context/ThemeContext';
-import { AppText } from '@/components/common/AppText';
+import { SectionBackground } from '@types';
+import { useAppTheme } from '@context';
+import { AppText } from '@common';
 import { useTranslation } from 'react-i18next';
 
 interface SectionWrapperProps {

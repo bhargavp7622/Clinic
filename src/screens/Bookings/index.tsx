@@ -8,17 +8,13 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '@/context/ThemeContext';
-import { useBooking } from '@/context/BookingContext';
-import { createBookingsListStyles } from './styles';
-import { Booking } from '@/types/booking.types';
-import { Badge } from '@/components/common/Badge';
-import { AppText } from '@/components/common/AppText';
-import { AppHeader } from '@/components/common/AppHeader';
-import { EmptyState } from '@/components/common/EmptyState';
-import { Icon } from '@/components/icons/Icon';
-import { formatCurrencyInr } from '@/utils/formatters';
+import { useAppTheme, useBooking } from '@context';
+import { AppText, AppHeader, Badge, EmptyState } from '@common';
+import { Icon } from '@components';
+import { Booking } from '@types';
+import { formatCurrencyInr } from '@utils';
 import { useTranslation } from 'react-i18next';
+import { createBookingsListStyles } from './styles';
 
 export const BookingsScreen: React.FC = React.memo(() => {
   const navigation = useNavigation<any>();

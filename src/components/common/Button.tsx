@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
-import { useAppTheme } from '@/context/ThemeContext';
-import { triggerHaptic } from '@/utils/haptics';
+import { useAppTheme } from '@context';
+import { triggerHaptic } from '@utils';
 import { AppText } from './AppText';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'festival';

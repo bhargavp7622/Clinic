@@ -1,11 +1,10 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { ServiceGridItem } from '@/types/config.types';
-import { useAppTheme } from '@/context/ThemeContext';
-import { formatCurrencyInr } from '@/utils/formatters';
-import { AppText } from '@/components/common/AppText';
-import { Icon } from '@/components/icons/Icon';
-import { triggerHaptic } from '@/utils/haptics';
+import { ServiceGridItem } from '@types';
+import { useAppTheme } from '@context';
+import { AppText } from '@common';
+import { Icon } from '@components';
+import { formatCurrencyInr, triggerHaptic } from '@utils';
 import { useTranslation } from 'react-i18next';
 
 interface ServiceGridSectionProps {

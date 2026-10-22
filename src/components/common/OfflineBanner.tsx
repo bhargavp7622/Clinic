@@ -1,10 +1,8 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { useNetwork } from '@/context/NetworkContext';
-import { useConfig } from '@/context/ConfigContext';
-import { useAppTheme } from '@/context/ThemeContext';
+import { useNetwork, useConfig, useAppTheme } from '@context';
 import { AppText } from './AppText';
-import { Icon } from '@/components/icons/Icon';
+import { Icon } from '@components';
 import { useTranslation } from 'react-i18next';
 
 interface OfflineBannerProps {

@@ -1,7 +1,7 @@
-import { validateLayoutConfig, sanitizeSections } from '@/utils/validation';
-import { NORMAL_LAYOUT_CONFIG, FESTIVAL_LAYOUT_CONFIG } from '@/api/mockData';
-import { SectionConfig } from '@/types/config.types';
-import { THEME_COLORS } from '@/common/theme';
+import { validateLayoutConfig, sanitizeSections } from '@utils';
+import { NORMAL_LAYOUT_CONFIG, FESTIVAL_LAYOUT_CONFIG } from '@api';
+import { SectionConfig } from '@types';
+import { THEME_COLORS } from '@theme';
 
 describe('LayoutConfig Validation & Resilience', () => {
   it('validates standard normal layout config successfully', () => {

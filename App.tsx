@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ConfigProvider, useConfig } from '@/context/ConfigContext';
-import { ThemeProvider } from '@/context/ThemeContext';
-import { NetworkProvider } from '@/context/NetworkContext';
-import { BookingProvider } from '@/context/BookingContext';
-import { PrescriptionProvider } from '@/context/PrescriptionContext';
+import {
+  ConfigProvider,
+  useConfig,
+  ThemeProvider,
+  NetworkProvider,
+  BookingProvider,
+  PrescriptionProvider,
+} from '@context';
 import { RootNavigator } from '@/navigation/RootNavigator';
 import { initI18n } from '@/i18n';
-import { initApiClient } from '@/api/mockApiClient';
+import { initApiClient } from '@api';
 
 const AppWithTheme: React.FC = () => {
   const { config, activeMode } = useConfig();

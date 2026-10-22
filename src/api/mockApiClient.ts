@@ -1,7 +1,11 @@
-import { LayoutConfig } from '@/types/config.types';
-import { Doctor } from '@/types/doctor.types';
-import { Slot, Booking, CreateBookingPayload } from '@/types/booking.types';
-import { Prescription } from '@/types/prescription.types';
+import {
+  LayoutConfig,
+  Doctor,
+  Slot,
+  Booking,
+  CreateBookingPayload,
+  Prescription,
+} from '@types';
 import {
   NORMAL_LAYOUT_CONFIG,
   FESTIVAL_LAYOUT_CONFIG,
@@ -9,7 +13,7 @@ import {
   MOCK_PRESCRIPTIONS,
   generateMockSlots,
 } from './mockData';
-import { StorageService, DevSettings, DEFAULT_DEV_SETTINGS } from '@/services/storage.service';
+import { StorageService, DevSettings, DEFAULT_DEV_SETTINGS } from '@services';
 
 export class ApiError extends Error {
   status: number;

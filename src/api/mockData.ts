@@ -1,8 +1,5 @@
-import { LayoutConfig } from '@/types/config.types';
-import { Doctor } from '@/types/doctor.types';
-import { Prescription } from '@/types/prescription.types';
-import { Slot } from '@/types/booking.types';
-import { THEME_COLORS } from '@/common/theme';
+import { LayoutConfig, Doctor, Prescription, Slot } from '@types';
+import { THEME_COLORS } from '@theme';
 
 export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
   version: 1,

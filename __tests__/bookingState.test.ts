@@ -1,5 +1,4 @@
-import { MockApiClient, updateApiClientDevSettings, ApiError } from '@/api/mockApiClient';
-import { generateMockSlots } from '@/api/mockData';
+import { MockApiClient, updateApiClientDevSettings, ApiError, generateMockSlots } from '@api';
 
 describe('Booking State & Mock API Tests', () => {
   beforeEach(async () => {

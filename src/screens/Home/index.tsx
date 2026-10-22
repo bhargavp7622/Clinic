@@ -8,22 +8,21 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useConfig } from '@/context/ConfigContext';
-import { useAppTheme } from '@/context/ThemeContext';
-import { createHomeStyles } from './styles';
-import { SectionRenderer } from './sections/SectionRenderer';
-import { SearchBar } from '@/components/common/SearchBar';
-import { OfflineBanner } from '@/components/common/OfflineBanner';
-import { AppText } from '@/components/common/AppText';
+import { useConfig, useAppTheme } from '@context';
 import {
+  AppText,
+  SearchBar,
+  OfflineBanner,
   HeroBannerSkeleton,
   CategoryChipsSkeleton,
   DoctorCardSkeleton,
   ServiceCardSkeleton,
-} from '@/components/common/Skeleton';
-import { Icon } from '@/components/icons/Icon';
+} from '@common';
+import { Icon } from '@components';
+import { triggerHaptic } from '@utils';
 import { useTranslation } from 'react-i18next';
-import { triggerHaptic } from '@/utils/haptics';
+import { createHomeStyles } from './styles';
+import { SectionRenderer } from './sections/SectionRenderer';
 
 export const HomeScreen: React.FC = React.memo(() => {
   const navigation = useNavigation<any>();

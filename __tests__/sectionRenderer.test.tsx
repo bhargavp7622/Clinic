@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 import { SectionRenderer } from '@/screens/Home/sections/SectionRenderer';
-import { ThemeProvider } from '@/context/ThemeContext';
-import { NORMAL_LAYOUT_CONFIG } from '@/api/mockData';
-import { SectionConfig } from '@/types/config.types';
-import { THEME_COLORS } from '@/common/theme';
+import { ThemeProvider } from '@context';
+import { NORMAL_LAYOUT_CONFIG } from '@api';
+import { SectionConfig } from '@types';
+import { THEME_COLORS } from '@theme';
 
 describe('SectionRenderer Tests', () => {
   it('renders a known section type (offer_strip) without error', () => {

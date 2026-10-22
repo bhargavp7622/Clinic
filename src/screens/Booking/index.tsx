@@ -9,24 +9,23 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute } from '@react-navigation/native';
-import { useAppTheme } from '@/context/ThemeContext';
-import { useBooking } from '@/context/BookingContext';
-import { createBookingStyles } from './styles';
-import { Doctor } from '@/types/doctor.types';
-import { Slot, Booking } from '@/types/booking.types';
-import { MockApiClient } from '@/api/mockApiClient';
-import { SearchBar } from '@/components/common/SearchBar';
-import { Button } from '@/components/common/Button';
-import { AppText } from '@/components/common/AppText';
-import { AppHeader } from '@/components/common/AppHeader';
-import { BottomSheet } from '@/components/common/BottomSheet';
-import { SuccessModal } from '@/components/common/SuccessModal';
-import { EmptyState } from '@/components/common/EmptyState';
-import { DoctorCardSkeleton } from '@/components/common/Skeleton';
-import { Icon } from '@/components/icons/Icon';
-import { formatCurrencyInr, getNextDays } from '@/utils/formatters';
-import { triggerHaptic } from '@/utils/haptics';
+import { useAppTheme, useBooking } from '@context';
+import {
+  AppText,
+  AppHeader,
+  Button,
+  SearchBar,
+  BottomSheet,
+  SuccessModal,
+  EmptyState,
+  DoctorCardSkeleton,
+} from '@common';
+import { Icon } from '@components';
+import { MockApiClient } from '@api';
+import { Doctor, Slot, Booking } from '@types';
+import { formatCurrencyInr, getNextDays, triggerHaptic } from '@utils';
 import { useTranslation } from 'react-i18next';
+import { createBookingStyles } from './styles';
 
 export const BookingScreen: React.FC = React.memo(() => {
   const route = useRoute<any>();

@@ -9,7 +9,7 @@ import {
   Dimensions,
   ViewStyle,
 } from 'react-native';
-import { useAppTheme } from '@/context/ThemeContext';
+import { useAppTheme } from '@context';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 

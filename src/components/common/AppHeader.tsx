@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, TouchableOpacity, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '@/context/ThemeContext';
+import { useAppTheme } from '@context';
 import { AppText } from './AppText';
-import { Icon } from '@/components/icons/Icon';
-import { triggerHaptic } from '@/utils/haptics';
+import { Icon } from '@components';
+import { triggerHaptic } from '@utils';
 
 interface AppHeaderProps {
   title: string;

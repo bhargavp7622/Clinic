@@ -2,15 +2,13 @@ import React, { useMemo, useCallback } from 'react';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute } from '@react-navigation/native';
-import { useAppTheme } from '@/context/ThemeContext';
-import { usePrescriptions } from '@/context/PrescriptionContext';
-import { createPrescriptionDetailStyles } from './styles';
-import { Medicine, MedicineTiming } from '@/types/prescription.types';
-import { AppHeader } from '@/components/common/AppHeader';
-import { AppText } from '@/components/common/AppText';
-import { Icon } from '@/components/icons/Icon';
-import { formatDateDisplay } from '@/utils/formatters';
+import { useAppTheme, usePrescriptions } from '@context';
+import { AppHeader, AppText } from '@common';
+import { Icon } from '@components';
+import { Medicine, MedicineTiming } from '@types';
+import { formatDateDisplay } from '@utils';
 import { useTranslation } from 'react-i18next';
+import { createPrescriptionDetailStyles } from './styles';
 
 export const PrescriptionDetailScreen: React.FC = React.memo(() => {
   const route = useRoute<any>();

@@ -2,14 +2,12 @@ import React from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '@/context/ThemeContext';
-import { useConfig } from '@/context/ConfigContext';
-import { AppHeader } from '@/components/common/AppHeader';
-import { AppText } from '@/components/common/AppText';
-import { Icon } from '@/components/icons/Icon';
+import { useAppTheme, useConfig } from '@context';
+import { AppHeader, AppText } from '@common';
+import { Icon } from '@components';
+import { triggerHaptic } from '@utils';
 import { changeLanguage } from '@/i18n';
 import { useTranslation } from 'react-i18next';
-import { triggerHaptic } from '@/utils/haptics';
 
 export const ProfileScreen: React.FC = React.memo(() => {
   const navigation = useNavigation<any>();

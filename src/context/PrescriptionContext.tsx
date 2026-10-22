@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { Prescription, MedicineTiming } from '@/types/prescription.types';
-import { MockApiClient } from '@/api/mockApiClient';
-import { StorageService } from '@/services/storage.service';
-import { triggerHaptic } from '@/utils/haptics';
+import { Prescription, MedicineTiming } from '@types';
+import { MockApiClient } from '@api';
+import { StorageService } from '@services';
+import { triggerHaptic } from '@utils';
 
 interface PrescriptionContextType {
   prescriptions: Prescription[];

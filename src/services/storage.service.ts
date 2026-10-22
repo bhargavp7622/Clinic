@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LayoutConfig } from '@/types/config.types';
-import { Booking } from '@/types/booking.types';
+import { LayoutConfig, Booking } from '@types';
 
 const STORAGE_KEYS = {
   LAYOUT_CONFIG: '@tapza/layout_config_cache',

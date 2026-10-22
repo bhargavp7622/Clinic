@@ -7,19 +7,13 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '@/context/ThemeContext';
-import { usePrescriptions } from '@/context/PrescriptionContext';
-import { createPrescriptionStyles } from './styles';
-import { Prescription } from '@/types/prescription.types';
-import { SearchBar } from '@/components/common/SearchBar';
-import { AppText } from '@/components/common/AppText';
-import { AppHeader } from '@/components/common/AppHeader';
-import { EmptyState } from '@/components/common/EmptyState';
-import { Skeleton } from '@/components/common/Skeleton';
-import { Icon } from '@/components/icons/Icon';
-import { formatDateDisplay } from '@/utils/formatters';
-import { triggerHaptic } from '@/utils/haptics';
+import { useAppTheme, usePrescriptions } from '@context';
+import { AppText, AppHeader, SearchBar, EmptyState, Skeleton } from '@common';
+import { Icon } from '@components';
+import { Prescription } from '@types';
+import { formatDateDisplay, triggerHaptic } from '@utils';
 import { useTranslation } from 'react-i18next';
+import { createPrescriptionStyles } from './styles';
 
 export const PrescriptionsScreen: React.FC = React.memo(() => {
   const navigation = useNavigation<any>();

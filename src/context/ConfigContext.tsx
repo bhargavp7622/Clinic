@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { LayoutConfig } from '@/types/config.types';
-import { MockApiClient, setRuntimeConfigMode } from '@/api/mockApiClient';
-import { NORMAL_LAYOUT_CONFIG } from '@/api/mockData';
-import { StorageService } from '@/services/storage.service';
+import { LayoutConfig } from '@types';
+import { MockApiClient, setRuntimeConfigMode, NORMAL_LAYOUT_CONFIG } from '@api';
+import { StorageService } from '@services';
 
 interface ConfigContextType {
   config: LayoutConfig;
