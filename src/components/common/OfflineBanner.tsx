@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNetwork } from '../../context/NetworkContext';
-import { useConfig } from '../../context/ConfigContext';
-import { useAppTheme } from '../../context/ThemeContext';
-import { Icon } from '../icons/Icon';
+import { View, TouchableOpacity } from 'react-native';
+import { useNetwork } from '@/context/NetworkContext';
+import { useConfig } from '@/context/ConfigContext';
+import { useAppTheme } from '@/context/ThemeContext';
+import { AppText } from './AppText';
+import { Icon } from '@/components/icons/Icon';
 import { useTranslation } from 'react-i18next';
 
 interface OfflineBannerProps {
@@ -27,9 +28,9 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = React.memo(({ onAdmin
   return (
     <View
       style={{
-        backgroundColor: '#FEF3C7',
+        backgroundColor: theme.colors.badgeBg,
         borderBottomWidth: 1,
-        borderBottomColor: '#FDE68A',
+        borderBottomColor: theme.colors.border,
         paddingHorizontal: theme.spacing.md,
         paddingVertical: 10,
         flexDirection: 'row',
@@ -38,40 +39,39 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = React.memo(({ onAdmin
       }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 8 }}>
-        <Icon name="alert-triangle" size={18} color="#D97706" />
-        <Text
-          style={{
-            fontSize: 12,
-            fontWeight: '600',
-            color: '#92400E',
-            marginLeft: 8,
-            flex: 1,
-          }}
+        <Icon name="alert-triangle" size={18} color={theme.colors.warning} />
+        <AppText
+          variant="bodySmall"
+          weight="600"
+          colorKey="textPrimary"
           numberOfLines={2}
+          style={{ marginLeft: 8, flex: 1 }}
         >
           {message}
-        </Text>
+        </AppText>
       </View>
 
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity
           onPress={() => refreshConfig()}
           style={{
-            backgroundColor: '#FDE68A',
+            backgroundColor: theme.colors.surface,
             paddingHorizontal: 8,
             paddingVertical: 4,
             borderRadius: 6,
             marginRight: 6,
+            borderWidth: 1,
+            borderColor: theme.colors.border,
           }}
         >
-          <Text style={{ fontSize: 11, fontWeight: '700', color: '#78350F' }}>
+          <AppText variant="labelSmall" weight="700" colorKey="primary">
             {t('common.retry')}
-          </Text>
+          </AppText>
         </TouchableOpacity>
 
         {onAdminPress ? (
           <TouchableOpacity onPress={onAdminPress} style={{ padding: 4 }}>
-            <Icon name="sliders" size={16} color="#92400E" />
+            <Icon name="sliders" size={16} color={theme.colors.textPrimary} />
           </TouchableOpacity>
         ) : null}
       </View>

@@ -1,15 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import {
   View,
-  Text,
   ImageBackground,
   StyleSheet,
   Animated,
   ViewStyle,
 } from 'react-native';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
-import { SectionBackground } from '../../../types/config.types';
-import { useAppTheme } from '../../../context/ThemeContext';
+import { SectionBackground } from '@/types/config.types';
+import { useAppTheme } from '@/context/ThemeContext';
+import { AppText } from '@/components/common/AppText';
+import { useTranslation } from 'react-i18next';
 
 interface SectionWrapperProps {
   id: string;
@@ -27,7 +28,7 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = React.memo(({
   style,
 }) => {
   const theme = useAppTheme();
-  // Section entrance animation as it mounts / scrolls into view
+  const { t } = useTranslation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(18)).current;
 
@@ -74,15 +75,17 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = React.memo(({
           style={StyleSheet.absoluteFill}
           resizeMode="cover"
         >
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.3)' }]} />
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.overlay }]} />
         </ImageBackground>
       );
     }
 
-    // Default: solid color band
     const bgColor = background.kind === 'color' ? background.value : theme.colors.surface;
     return <View style={[StyleSheet.absoluteFill, { backgroundColor: bgColor }]} />;
   };
+
+  const isGradient = background.kind === 'gradient';
+  const displayTitle = title ? t(title, { defaultValue: title }) : '';
 
   return (
     <Animated.View
@@ -97,19 +100,15 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = React.memo(({
     >
       {renderBackground()}
 
-      {title ? (
+      {displayTitle ? (
         <View style={[styles.headerContainer, { paddingHorizontal: theme.spacing.md }]}>
-          <Text
-            style={[
-              styles.title,
-              {
-                color: background.kind === 'gradient' ? '#FFFFFF' : theme.colors.textPrimary,
-                fontSize: theme.typography.titleLarge.fontSize,
-              },
-            ]}
+          <AppText
+            variant="titleLarge"
+            weight="700"
+            color={isGradient ? theme.colors.surface : theme.colors.textPrimary}
           >
-            {title}
-          </Text>
+            {displayTitle}
+          </AppText>
         </View>
       ) : null}
 
@@ -127,10 +126,6 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     marginBottom: 10,
-  },
-  title: {
-    fontWeight: '700',
-    letterSpacing: -0.2,
   },
   content: {
     width: '100%',

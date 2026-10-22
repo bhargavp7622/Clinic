@@ -1,5 +1,5 @@
 import { StyleSheet, Platform } from 'react-native';
-import { AppTheme } from '../../types/theme.types';
+import { AppTheme } from '@/types/theme.types';
 
 export const createHomeStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -31,18 +31,6 @@ export const createHomeStyles = (theme: AppTheme) =>
       alignItems: 'center',
       gap: 6,
     },
-    brandTitle: {
-      fontSize: 18,
-      fontWeight: '800',
-      color: theme.colors.primary,
-      letterSpacing: -0.4,
-    },
-    locationSubtext: {
-      fontSize: 12,
-      fontWeight: '500',
-      color: theme.colors.textSecondary,
-      marginTop: 2,
-    },
     headerActions: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -62,17 +50,12 @@ export const createHomeStyles = (theme: AppTheme) =>
     },
     festivalBannerStrip: {
       backgroundColor: theme.colors.accent,
-      paddingVertical: 5,
+      paddingVertical: 6,
       paddingHorizontal: theme.spacing.md,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       gap: 6,
-    },
-    festivalBannerText: {
-      color: '#451A03',
-      fontSize: 11,
-      fontWeight: '800',
     },
     scrollContent: {
       paddingBottom: 40,

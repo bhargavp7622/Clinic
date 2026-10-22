@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LayoutConfig } from '../types/config.types';
-import { Booking } from '../types/booking.types';
+import { LayoutConfig } from '@/types/config.types';
+import { Booking } from '@/types/booking.types';
 
 const STORAGE_KEYS = {
   LAYOUT_CONFIG: '@tapza/layout_config_cache',
@@ -12,7 +12,7 @@ const STORAGE_KEYS = {
 };
 
 export interface DevSettings {
-  simulatedLatencyMs: number; // 0, 1000, 3000
+  simulatedLatencyMs: number;
   forceFailure: boolean;
   simulateSlotConflict: boolean;
 }
@@ -24,7 +24,6 @@ export const DEFAULT_DEV_SETTINGS: DevSettings = {
 };
 
 export const StorageService = {
-  // Config caching for offline resilience
   async saveCachedConfig(config: LayoutConfig): Promise<void> {
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.LAYOUT_CONFIG, JSON.stringify(config));
@@ -43,7 +42,6 @@ export const StorageService = {
     }
   },
 
-  // Active runtime config mode ('normal' | 'festival')
   async saveActiveConfigMode(mode: 'normal' | 'festival'): Promise<void> {
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.CONFIG_MODE, mode);
@@ -56,17 +54,16 @@ export const StorageService = {
     try {
       const mode = await AsyncStorage.getItem(STORAGE_KEYS.CONFIG_MODE);
       return mode === 'festival' ? 'festival' : 'normal';
-    } catch (e) {
+    } catch {
       return 'normal';
     }
   },
 
-  // User Bookings
   async getBookings(): Promise<Booking[]> {
     try {
       const data = await AsyncStorage.getItem(STORAGE_KEYS.BOOKINGS);
       return data ? JSON.parse(data) : [];
-    } catch (e) {
+    } catch {
       return [];
     }
   },
@@ -74,7 +71,6 @@ export const StorageService = {
   async saveBooking(booking: Booking): Promise<Booking[]> {
     try {
       const current = await this.getBookings();
-      // Remove any existing duplicate or optimistic version with same id
       const filtered = current.filter(b => b.id !== booking.id);
       const updated = [booking, ...filtered];
       await AsyncStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(updated));
@@ -105,12 +101,11 @@ export const StorageService = {
     }
   },
 
-  // Dose History (Prescription ID + Medicine ID + Timing + Date)
   async getDoseHistory(): Promise<Record<string, boolean>> {
     try {
       const data = await AsyncStorage.getItem(STORAGE_KEYS.DOSE_HISTORY);
       return data ? JSON.parse(data) : {};
-    } catch (e) {
+    } catch {
       return {};
     }
   },
@@ -138,12 +133,11 @@ export const StorageService = {
     }
   },
 
-  // Resilience & Dev Settings (Switch for latency & failure)
   async getDevSettings(): Promise<DevSettings> {
     try {
       const data = await AsyncStorage.getItem(STORAGE_KEYS.DEV_SETTINGS);
       return data ? { ...DEFAULT_DEV_SETTINGS, ...JSON.parse(data) } : DEFAULT_DEV_SETTINGS;
-    } catch (e) {
+    } catch {
       return DEFAULT_DEV_SETTINGS;
     }
   },
@@ -156,11 +150,10 @@ export const StorageService = {
     }
   },
 
-  // Language setting (en, hi, te)
   async getLanguage(): Promise<string> {
     try {
       return (await AsyncStorage.getItem(STORAGE_KEYS.LANGUAGE)) || 'en';
-    } catch (e) {
+    } catch {
       return 'en';
     }
   },

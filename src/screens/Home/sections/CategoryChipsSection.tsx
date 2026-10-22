@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import {
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  View,
-} from 'react-native';
-import { CategoryChipItem } from '../../../types/config.types';
-import { useAppTheme } from '../../../context/ThemeContext';
-import { Icon } from '../../../components/icons/Icon';
-import { triggerHaptic } from '../../../utils/haptics';
+import { ScrollView, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { CategoryChipItem } from '@/types/config.types';
+import { useAppTheme } from '@/context/ThemeContext';
+import { AppText } from '@/components/common/AppText';
+import { Icon } from '@/components/icons/Icon';
+import { triggerHaptic } from '@/utils/haptics';
+import { useTranslation } from 'react-i18next';
 
 interface CategoryChipsSectionProps {
   items?: CategoryChipItem[];
@@ -21,6 +17,7 @@ export const CategoryChipsSection: React.FC<CategoryChipsSectionProps> = React.m
   onSelectCategory,
 }) => {
   const theme = useAppTheme();
+  const { t } = useTranslation();
   const [selectedKey, setSelectedKey] = useState<string>('all');
 
   if (!items || items.length === 0) return null;
@@ -42,6 +39,7 @@ export const CategoryChipsSection: React.FC<CategoryChipsSectionProps> = React.m
     >
       {items.map(item => {
         const isSelected = selectedKey === item.categoryKey;
+        const translatedLabel = item.label ? t(item.label, { defaultValue: item.label }) : '';
 
         return (
           <TouchableOpacity
@@ -58,7 +56,7 @@ export const CategoryChipsSection: React.FC<CategoryChipsSectionProps> = React.m
                   ? theme.colors.primary
                   : theme.colors.border,
                 borderRadius: theme.borderRadius.full,
-                minHeight: theme.minTouchTarget, // ensures accessible 44pt tap target
+                minHeight: theme.minTouchTarget, // Accessible 44pt tap target
                 ...theme.shadows.subtle,
               },
             ]}
@@ -67,21 +65,16 @@ export const CategoryChipsSection: React.FC<CategoryChipsSectionProps> = React.m
               <Icon
                 name={item.icon}
                 size={16}
-                color={isSelected ? '#FFFFFF' : theme.colors.primary}
+                color={isSelected ? theme.colors.surface : theme.colors.primary}
               />
             </View>
-            <Text
-              style={[
-                styles.chipText,
-                {
-                  color: isSelected ? '#FFFFFF' : theme.colors.textPrimary,
-                  fontSize: theme.typography.labelLarge.fontSize,
-                  fontWeight: isSelected ? '700' : '500',
-                },
-              ]}
+            <AppText
+              variant="labelLarge"
+              weight={isSelected ? '700' : '500'}
+              color={isSelected ? theme.colors.surface : theme.colors.textPrimary}
             >
-              {item.label}
-            </Text>
+              {translatedLabel}
+            </AppText>
           </TouchableOpacity>
         );
       })}
@@ -102,8 +95,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderWidth: 1,
-  },
-  chipText: {
-    letterSpacing: 0.1,
   },
 });

@@ -1,25 +1,27 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MainTabParamList } from '../types/navigation.types';
-import { HomeScreen } from '../screens/Home';
-import { BookingsScreen } from '../screens/Bookings';
-import { PrescriptionsScreen } from '../screens/Prescriptions';
-import { ProfileScreen } from '../screens/Profile';
-import { useAppTheme } from '../context/ThemeContext';
-import { useConfig } from '../context/ConfigContext';
-import { Icon } from '../components/icons/Icon';
+import { MainTabParamList } from '@/types/navigation.types';
+import { HomeScreen } from '@/screens/Home';
+import { BookingsScreen } from '@/screens/Bookings';
+import { PrescriptionsScreen } from '@/screens/Prescriptions';
+import { ProfileScreen } from '@/screens/Profile';
+import { useAppTheme } from '@/context/ThemeContext';
+import { useConfig } from '@/context/ConfigContext';
+import { Icon } from '@/components/icons/Icon';
 import { Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const TabNavigator: React.FC = () => {
   const theme = useAppTheme();
   const { config } = useConfig();
+  const { t } = useTranslation();
 
-  // Find labels from config tabs if present
-  const getTabLabel = (screenName: string, defaultLabel: string) => {
-    const found = config.tabs?.find(t => t.screen === screenName);
-    return found?.label || defaultLabel;
+  const getTabLabel = (screenName: string, defaultKey: string) => {
+    const found = config.tabs?.find(tItem => tItem.screen === screenName);
+    const labelKey = found?.label || defaultKey;
+    return t(labelKey, { defaultValue: labelKey });
   };
 
   return (
@@ -47,32 +49,32 @@ export const TabNavigator: React.FC = () => {
         name="HomeTab"
         component={HomeScreen}
         options={{
-          tabBarLabel: getTabLabel('home', 'Home'),
-          tabBarIcon: ({ color, size }) => <Icon name="home" color={color} size={22} />,
+          tabBarLabel: getTabLabel('home', 'tabs.home'),
+          tabBarIcon: ({ color }) => <Icon name="home" color={color} size={22} />,
         }}
       />
       <Tab.Screen
         name="BookingsTab"
         component={BookingsScreen}
         options={{
-          tabBarLabel: getTabLabel('bookings', 'Appointments'),
-          tabBarIcon: ({ color, size }) => <Icon name="calendar" color={color} size={22} />,
+          tabBarLabel: getTabLabel('bookings', 'tabs.appointments'),
+          tabBarIcon: ({ color }) => <Icon name="calendar" color={color} size={22} />,
         }}
       />
       <Tab.Screen
         name="PrescriptionsTab"
         component={PrescriptionsScreen}
         options={{
-          tabBarLabel: getTabLabel('prescriptions', 'Prescriptions'),
-          tabBarIcon: ({ color, size }) => <Icon name="file-text" color={color} size={22} />,
+          tabBarLabel: getTabLabel('prescriptions', 'tabs.prescriptions'),
+          tabBarIcon: ({ color }) => <Icon name="file-text" color={color} size={22} />,
         }}
       />
       <Tab.Screen
         name="ProfileTab"
         component={ProfileScreen}
         options={{
-          tabBarLabel: getTabLabel('profile', 'Profile'),
-          tabBarIcon: ({ color, size }) => <Icon name="user" color={color} size={22} />,
+          tabBarLabel: getTabLabel('profile', 'tabs.profile'),
+          tabBarIcon: ({ color }) => <Icon name="user" color={color} size={22} />,
         }}
       />
     </Tab.Navigator>

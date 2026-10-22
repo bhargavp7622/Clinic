@@ -4,8 +4,8 @@ import {
   DevSettings,
   DEFAULT_DEV_SETTINGS,
   StorageService,
-} from '../services/storage.service';
-import { updateApiClientDevSettings, getApiClientDevSettings } from '../api/mockApiClient';
+} from '@/services/storage.service';
+import { updateApiClientDevSettings } from '@/api/mockApiClient';
 
 interface NetworkContextType {
   isConnected: boolean;
@@ -37,13 +37,11 @@ export const NetworkProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [devSettings, setDevSettings] = useState<DevSettings>(DEFAULT_DEV_SETTINGS);
 
   useEffect(() => {
-    // 1. Subscribe to NetInfo network changes
     const unsubscribe = NetInfo.addEventListener(state => {
       setIsConnected(state.isConnected ?? true);
       setIsInternetReachable(state.isInternetReachable);
     });
 
-    // 2. Load stored dev settings
     StorageService.getDevSettings().then(settings => {
       setDevSettings(settings);
       updateApiClientDevSettings(settings);

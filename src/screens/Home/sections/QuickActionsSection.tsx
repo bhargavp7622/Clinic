@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { QuickActionItem } from '../../../types/config.types';
-import { useAppTheme } from '../../../context/ThemeContext';
-import { Icon } from '../../../components/icons/Icon';
-import { triggerHaptic } from '../../../utils/haptics';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { QuickActionItem } from '@/types/config.types';
+import { useAppTheme } from '@/context/ThemeContext';
+import { AppText } from '@/components/common/AppText';
+import { Icon } from '@/components/icons/Icon';
+import { triggerHaptic } from '@/utils/haptics';
+import { useTranslation } from 'react-i18next';
 
 interface QuickActionsSectionProps {
   items?: QuickActionItem[];
@@ -15,87 +17,83 @@ export const QuickActionsSection: React.FC<QuickActionsSectionProps> = React.mem
   onActionPress,
 }) => {
   const theme = useAppTheme();
+  const { t } = useTranslation();
 
   if (!items || items.length === 0) return null;
 
   return (
     <View style={[styles.grid, { paddingHorizontal: theme.spacing.md }]}>
-      {items.map(item => (
-        <TouchableOpacity
-          key={item.id}
-          activeOpacity={0.8}
-          onPress={() => {
-            triggerHaptic('light');
-            onActionPress?.(item.action);
-          }}
-          style={[
-            styles.tile,
-            {
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.borderRadius.lg,
-              borderColor: theme.colors.border,
-              padding: theme.spacing.md,
-              ...theme.shadows.subtle,
-            },
-          ]}
-        >
-          {item.badge ? (
+      {items.map(item => {
+        const translatedLabel = item.label ? t(item.label, { defaultValue: item.label }) : '';
+        const translatedSublabel = item.sublabel ? t(item.sublabel, { defaultValue: item.sublabel }) : '';
+        const translatedBadge = item.badge ? t(item.badge, { defaultValue: item.badge }) : '';
+
+        return (
+          <TouchableOpacity
+            key={item.id}
+            activeOpacity={0.8}
+            onPress={() => {
+              triggerHaptic('light');
+              onActionPress?.(item.action);
+            }}
+            style={[
+              styles.tile,
+              {
+                backgroundColor: theme.colors.surface,
+                borderRadius: theme.borderRadius.lg,
+                borderColor: theme.colors.border,
+                padding: theme.spacing.md,
+                ...theme.shadows.subtle,
+              },
+            ]}
+          >
+            {translatedBadge ? (
+              <View
+                style={[
+                  styles.badge,
+                  {
+                    backgroundColor: theme.colors.badgeBg,
+                  },
+                ]}
+              >
+                <AppText variant="labelSmall" weight="800" colorKey="badgeText">
+                  {translatedBadge}
+                </AppText>
+              </View>
+            ) : null}
+
             <View
               style={[
-                styles.badge,
+                styles.iconWrapper,
                 {
                   backgroundColor: theme.colors.badgeBg,
                 },
               ]}
             >
-              <Text style={[styles.badgeText, { color: theme.colors.badgeText }]}>
-                {item.badge}
-              </Text>
+              <Icon
+                name={item.icon}
+                size={22}
+                color={theme.colors.primary}
+              />
             </View>
-          ) : null}
 
-          <View
-            style={[
-              styles.iconWrapper,
-              {
-                backgroundColor: theme.isFestival ? '#FFEDD5' : '#E0F2FE',
-              },
-            ]}
-          >
-            <Icon
-              name={item.icon}
-              size={22}
-              color={theme.isFestival ? '#C2410C' : theme.colors.primary}
-            />
-          </View>
-
-          <Text
-            style={[
-              styles.label,
-              {
-                color: theme.colors.textPrimary,
-                fontSize: theme.typography.titleMedium.fontSize,
-              },
-            ]}
-          >
-            {item.label}
-          </Text>
-
-          {item.sublabel ? (
-            <Text
-              style={[
-                styles.sublabel,
-                {
-                  color: theme.colors.textSecondary,
-                  fontSize: theme.typography.bodySmall.fontSize,
-                },
-              ]}
+            <AppText
+              variant="titleMedium"
+              weight="700"
+              colorKey="textPrimary"
+              style={{ marginBottom: 2 }}
             >
-              {item.sublabel}
-            </Text>
-          ) : null}
-        </TouchableOpacity>
-      ))}
+              {translatedLabel}
+            </AppText>
+
+            {translatedSublabel ? (
+              <AppText variant="bodySmall" colorKey="textSecondary">
+                {translatedSublabel}
+              </AppText>
+            ) : null}
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 });
@@ -123,13 +121,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 8,
   },
-  label: {
-    fontWeight: '700',
-    marginBottom: 2,
-  },
-  sublabel: {
-    fontWeight: '400',
-  },
   badge: {
     position: 'absolute',
     top: 8,
@@ -137,9 +128,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
-  },
-  badgeText: {
-    fontSize: 9,
-    fontWeight: '800',
   },
 });

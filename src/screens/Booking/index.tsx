@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
-  Text,
   FlatList,
   Image,
   TouchableOpacity,
@@ -9,47 +8,44 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '../../context/ThemeContext';
-import { useBooking } from '../../context/BookingContext';
+import { useRoute } from '@react-navigation/native';
+import { useAppTheme } from '@/context/ThemeContext';
+import { useBooking } from '@/context/BookingContext';
 import { createBookingStyles } from './styles';
-import { Doctor } from '../../types/doctor.types';
-import { Slot, Booking } from '../../types/booking.types';
-import { MockApiClient } from '../../api/mockApiClient';
-import { SearchBar } from '../../components/common/SearchBar';
-import { Button } from '../../components/common/Button';
-import { BottomSheet } from '../../components/common/BottomSheet';
-import { SuccessModal } from '../../components/common/SuccessModal';
-import { EmptyState } from '../../components/common/EmptyState';
-import { DoctorCardSkeleton } from '../../components/common/Skeleton';
-import { Icon } from '../../components/icons/Icon';
-import { formatCurrencyInr, getNextDays } from '../../utils/formatters';
-import { triggerHaptic } from '../../utils/haptics';
+import { Doctor } from '@/types/doctor.types';
+import { Slot, Booking } from '@/types/booking.types';
+import { MockApiClient } from '@/api/mockApiClient';
+import { SearchBar } from '@/components/common/SearchBar';
+import { Button } from '@/components/common/Button';
+import { AppText } from '@/components/common/AppText';
+import { AppHeader } from '@/components/common/AppHeader';
+import { BottomSheet } from '@/components/common/BottomSheet';
+import { SuccessModal } from '@/components/common/SuccessModal';
+import { EmptyState } from '@/components/common/EmptyState';
+import { DoctorCardSkeleton } from '@/components/common/Skeleton';
+import { Icon } from '@/components/icons/Icon';
+import { formatCurrencyInr, getNextDays } from '@/utils/formatters';
+import { triggerHaptic } from '@/utils/haptics';
 import { useTranslation } from 'react-i18next';
 
 export const BookingScreen: React.FC = React.memo(() => {
   const route = useRoute<any>();
-  const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = useMemo(() => createBookingStyles(theme), [theme]);
   const { t } = useTranslation();
   const { createBooking, isBookingInProgress } = useBooking();
 
-  // Route preselected parameters
   const preselectedDoctorId = route.params?.doctorId;
   const preselectedQuery = route.params?.preselectedQuery || '';
 
-  // Local state
   const [searchQuery, setSearchQuery] = useState<string>(preselectedQuery);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [isLoadingDoctors, setIsLoadingDoctors] = useState<boolean>(true);
   const [errorDoctors, setErrorDoctors] = useState<string | null>(null);
 
-  // Date selection state
   const dateOptions = useMemo(() => getNextDays(7), []);
   const [selectedDate, setSelectedDate] = useState<string>(dateOptions[0].dateStr);
 
-  // BottomSheet Slot state
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [isSheetVisible, setIsSheetVisible] = useState<boolean>(false);
   const [slots, setSlots] = useState<Slot[]>([]);
@@ -57,11 +53,9 @@ export const BookingScreen: React.FC = React.memo(() => {
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [slotError, setSlotError] = useState<string | null>(null);
 
-  // Success Modal
   const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null);
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState<boolean>(false);
 
-  // Fetch doctors
   const fetchDoctors = useCallback(async (query: string) => {
     setIsLoadingDoctors(true);
     setErrorDoctors(null);
@@ -79,7 +73,6 @@ export const BookingScreen: React.FC = React.memo(() => {
     fetchDoctors(searchQuery);
   }, [searchQuery, fetchDoctors]);
 
-  // Open slot picker for doctor
   const handleOpenSlots = useCallback(
     async (doctor: Doctor) => {
       setSelectedDoctor(doctor);
@@ -101,7 +94,6 @@ export const BookingScreen: React.FC = React.memo(() => {
     [selectedDate]
   );
 
-  // Re-fetch slots if date changes while sheet is open
   const handleSelectDate = useCallback(
     async (dateStr: string) => {
       setSelectedDate(dateStr);
@@ -122,7 +114,6 @@ export const BookingScreen: React.FC = React.memo(() => {
     [selectedDoctor]
   );
 
-  // Check if doctor was passed directly in route params and open slot sheet
   useEffect(() => {
     if (preselectedDoctorId && doctors.length > 0 && !selectedDoctor) {
       const match = doctors.find(d => d.id === preselectedDoctorId);
@@ -132,7 +123,6 @@ export const BookingScreen: React.FC = React.memo(() => {
     }
   }, [preselectedDoctorId, doctors, selectedDoctor, handleOpenSlots]);
 
-  // Handle slot booking confirmation (Instant Optimistic Update)
   const handleConfirmBooking = useCallback(async () => {
     if (!selectedDoctor || !selectedSlot) return;
 
@@ -157,7 +147,6 @@ export const BookingScreen: React.FC = React.memo(() => {
       setConfirmedBooking(res.booking);
       setIsSuccessModalVisible(true);
     } else {
-      // Slot conflict (409) or error
       setSlotError(res.error || t('booking.slot_conflict_error'));
     }
   }, [selectedDoctor, selectedSlot, selectedDate, createBooking, t]);
@@ -180,17 +169,25 @@ export const BookingScreen: React.FC = React.memo(() => {
             resizeMode="cover"
           />
           <View style={styles.docInfo}>
-            <Text style={styles.docName}>{item.name}</Text>
-            <Text style={styles.docSpecialty}>{item.specialty}</Text>
+            <AppText variant="titleMedium" weight="700">
+              {item.name}
+            </AppText>
+            <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+              {item.specialty}
+            </AppText>
             <View style={styles.docMetaRow}>
               <View style={styles.metaItem}>
-                <Icon name="star" size={13} color="#F59E0B" />
-                <Text style={styles.metaText}>{item.rating.toFixed(1)}</Text>
+                <Icon name="star" size={13} color={theme.colors.warning} />
+                <AppText variant="labelSmall" weight="700" colorKey="warning">
+                  {item.rating.toFixed(1)}
+                </AppText>
               </View>
-              <Text style={styles.metaText}>•</Text>
+              <AppText variant="labelSmall" colorKey="textSecondary">•</AppText>
               <View style={styles.metaItem}>
                 <Icon name="activity" size={12} color={theme.colors.textSecondary} />
-                <Text style={styles.metaText}>{item.experienceYears} yrs {t('common.experience')}</Text>
+                <AppText variant="labelSmall" colorKey="textSecondary">
+                  {item.experienceYears} yrs {t('common.experience')}
+                </AppText>
               </View>
             </View>
           </View>
@@ -198,22 +195,26 @@ export const BookingScreen: React.FC = React.memo(() => {
 
         <View style={styles.clinicRow}>
           <Icon name="map-pin" size={13} color={theme.colors.textSecondary} />
-          <Text style={styles.clinicText} numberOfLines={1}>
+          <AppText variant="bodySmall" colorKey="textSecondary" numberOfLines={1} style={{ flex: 1, marginLeft: 4 }}>
             {item.clinicLocation}
-          </Text>
+          </AppText>
         </View>
 
         <View style={styles.docFooter}>
           <View>
-            <Text style={styles.feeLabel}>{t('common.consultation_fee')}</Text>
-            <Text style={styles.feeAmount}>{formatCurrencyInr(item.feeInr)}</Text>
+            <AppText variant="labelSmall" colorKey="textSecondary">
+              {t('common.fee')}
+            </AppText>
+            <AppText variant="titleLarge" weight="800">
+              {formatCurrencyInr(item.feeInr)}
+            </AppText>
           </View>
 
           <Button
             title={t('common.book_now')}
             onPress={() => handleOpenSlots(item)}
             variant="primary"
-            icon={<Icon name="calendar-plus" size={15} color="#FFFFFF" />}
+            icon={<Icon name="calendar-plus" size={15} color={theme.colors.surface} />}
           />
         </View>
       </View>
@@ -222,18 +223,7 @@ export const BookingScreen: React.FC = React.memo(() => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          style={{ padding: 4 }}
-        >
-          <Icon name="chevron-left" size={24} color={theme.colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('booking.title')}</Text>
-        <View style={{ width: 32 }} />
-      </View>
+      <AppHeader title={t('booking.title')} />
 
       {/* Debounced Search */}
       <View style={styles.searchWrapper}>
@@ -246,7 +236,9 @@ export const BookingScreen: React.FC = React.memo(() => {
 
       {/* Interactive Date Selection Strip */}
       <View style={styles.dateStripContainer}>
-        <Text style={styles.dateStripLabel}>{t('booking.select_date')}</Text>
+        <AppText variant="labelSmall" colorKey="textSecondary" style={{ paddingHorizontal: theme.spacing.md, marginBottom: 8 }}>
+          {t('booking.select_date')}
+        </AppText>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -268,22 +260,21 @@ export const BookingScreen: React.FC = React.memo(() => {
                   },
                 ]}
               >
-                <Text
-                  style={[
-                    styles.dateDayName,
-                    { color: isSelected ? '#FFFFFF' : theme.colors.textSecondary },
-                  ]}
+                <AppText
+                  variant="labelSmall"
+                  weight="600"
+                  color={isSelected ? theme.colors.surface : theme.colors.textSecondary}
+                  style={{ marginBottom: 4 }}
                 >
                   {item.dayName}
-                </Text>
-                <Text
-                  style={[
-                    styles.dateDayNumber,
-                    { color: isSelected ? '#FFFFFF' : theme.colors.textPrimary },
-                  ]}
+                </AppText>
+                <AppText
+                  variant="titleLarge"
+                  weight="800"
+                  color={isSelected ? theme.colors.surface : theme.colors.textPrimary}
                 >
                   {item.dayNumber}
-                </Text>
+                </AppText>
               </TouchableOpacity>
             );
           })}
@@ -307,9 +298,9 @@ export const BookingScreen: React.FC = React.memo(() => {
       ) : doctors.length === 0 ? (
         <EmptyState
           iconName="search"
-          title="No Doctors Found"
-          description="Try searching with a different specialty, clinic, or doctor name."
-          actionTitle="Reset Search"
+          title={t('booking.no_doctors_found')}
+          description={t('booking.no_doctors_desc')}
+          actionTitle={t('booking.reset_search')}
           onActionPress={() => setSearchQuery('')}
         />
       ) : (
@@ -327,19 +318,21 @@ export const BookingScreen: React.FC = React.memo(() => {
         {selectedDoctor ? (
           <View>
             <View style={styles.sheetHeader}>
-              <Text style={styles.sheetTitle}>{selectedDoctor.name}</Text>
-              <Text style={styles.sheetSubtitle}>
+              <AppText variant="headlineMedium" weight="700">
+                {selectedDoctor.name}
+              </AppText>
+              <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
                 {selectedDoctor.specialty} • {selectedDate}
-              </Text>
+              </AppText>
             </View>
 
             <ScrollView style={styles.sheetBody}>
               {isLoadingSlots ? (
                 <View style={{ padding: 24, alignItems: 'center' }}>
                   <ActivityIndicator size="large" color={theme.colors.primary} />
-                  <Text style={{ marginTop: 8, color: theme.colors.textSecondary }}>
-                    Loading available slots...
-                  </Text>
+                  <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 8 }}>
+                    {t('booking.loading_slots')}
+                  </AppText>
                 </View>
               ) : slots.length === 0 ? (
                 <EmptyState
@@ -352,7 +345,9 @@ export const BookingScreen: React.FC = React.memo(() => {
                   {/* Morning Slots */}
                   {morningSlots.length > 0 ? (
                     <>
-                      <Text style={styles.slotSectionTitle}>{t('booking.morning_slots')}</Text>
+                      <AppText variant="titleMedium" weight="700" style={{ marginBottom: 10, marginTop: 6 }}>
+                        {t('booking.morning_slots')}
+                      </AppText>
                       <View style={styles.slotGrid}>
                         {morningSlots.map(slot => {
                           const isSelected = selectedSlot?.id === slot.id;
@@ -380,20 +375,19 @@ export const BookingScreen: React.FC = React.memo(() => {
                                 },
                               ]}
                             >
-                              <Text
-                                style={[
-                                  styles.slotText,
-                                  {
-                                    color: !slot.available
-                                      ? theme.colors.textSecondary
-                                      : isSelected
-                                      ? '#FFFFFF'
-                                      : theme.colors.textPrimary,
-                                  },
-                                ]}
+                              <AppText
+                                variant="labelLarge"
+                                weight="700"
+                                color={
+                                  !slot.available
+                                    ? theme.colors.textSecondary
+                                    : isSelected
+                                    ? theme.colors.surface
+                                    : theme.colors.textPrimary
+                                }
                               >
                                 {slot.startsAt}
-                              </Text>
+                              </AppText>
                             </TouchableOpacity>
                           );
                         })}
@@ -404,7 +398,9 @@ export const BookingScreen: React.FC = React.memo(() => {
                   {/* Evening Slots */}
                   {eveningSlots.length > 0 ? (
                     <>
-                      <Text style={styles.slotSectionTitle}>{t('booking.evening_slots')}</Text>
+                      <AppText variant="titleMedium" weight="700" style={{ marginBottom: 10, marginTop: 6 }}>
+                        {t('booking.evening_slots')}
+                      </AppText>
                       <View style={styles.slotGrid}>
                         {eveningSlots.map(slot => {
                           const isSelected = selectedSlot?.id === slot.id;
@@ -432,20 +428,19 @@ export const BookingScreen: React.FC = React.memo(() => {
                                 },
                               ]}
                             >
-                              <Text
-                                style={[
-                                  styles.slotText,
-                                  {
-                                    color: !slot.available
-                                      ? theme.colors.textSecondary
-                                      : isSelected
-                                      ? '#FFFFFF'
-                                      : theme.colors.textPrimary,
-                                  },
-                                ]}
+                              <AppText
+                                variant="labelLarge"
+                                weight="700"
+                                color={
+                                  !slot.available
+                                    ? theme.colors.textSecondary
+                                    : isSelected
+                                    ? theme.colors.surface
+                                    : theme.colors.textPrimary
+                                }
                               >
                                 {slot.startsAt}
-                              </Text>
+                              </AppText>
                             </TouchableOpacity>
                           );
                         })}
@@ -453,7 +448,11 @@ export const BookingScreen: React.FC = React.memo(() => {
                     </>
                   ) : null}
 
-                  {slotError ? <Text style={styles.errorText}>{slotError}</Text> : null}
+                  {slotError ? (
+                    <AppText variant="bodySmall" weight="600" colorKey="error" align="center" style={{ marginTop: 8 }}>
+                      {slotError}
+                    </AppText>
+                  ) : null}
                 </>
               )}
             </ScrollView>
@@ -463,7 +462,7 @@ export const BookingScreen: React.FC = React.memo(() => {
                 title={
                   selectedSlot
                     ? `${t('booking.confirm_booking')} (${selectedSlot.startsAt})`
-                    : 'Select a Slot to Continue'
+                    : t('booking.select_slot_continue')
                 }
                 onPress={handleConfirmBooking}
                 disabled={!selectedSlot || isBookingInProgress}
@@ -480,10 +479,7 @@ export const BookingScreen: React.FC = React.memo(() => {
       <SuccessModal
         visible={isSuccessModalVisible}
         booking={confirmedBooking}
-        onClose={() => {
-          setIsSuccessModalVisible(false);
-          navigation.navigate('MainTabs', { screen: 'BookingsTab' });
-        }}
+        onClose={() => setIsSuccessModalVisible(false)}
       />
     </SafeAreaView>
   );

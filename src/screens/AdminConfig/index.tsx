@@ -1,27 +1,26 @@
 import React, { useMemo } from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   ScrollView,
   Switch,
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '../../context/ThemeContext';
-import { useConfig } from '../../context/ConfigContext';
-import { useNetwork } from '../../context/NetworkContext';
+import { useAppTheme } from '@/context/ThemeContext';
+import { useConfig } from '@/context/ConfigContext';
+import { useNetwork } from '@/context/NetworkContext';
 import { createAdminStyles } from './styles';
-import { Button } from '../../components/common/Button';
-import { Icon } from '../../components/icons/Icon';
-import { StorageService } from '../../services/storage.service';
-import { triggerHaptic } from '../../utils/haptics';
-import { changeLanguage } from '../../i18n';
+import { Button } from '@/components/common/Button';
+import { AppText } from '@/components/common/AppText';
+import { AppHeader } from '@/components/common/AppHeader';
+import { Icon } from '@/components/icons/Icon';
+import { StorageService } from '@/services/storage.service';
+import { triggerHaptic } from '@/utils/haptics';
+import { changeLanguage } from '@/i18n';
 import { useTranslation } from 'react-i18next';
 
 export const AdminConfigScreen: React.FC = React.memo(() => {
-  const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = useMemo(() => createAdminStyles(theme), [theme]);
   const { t, i18n } = useTranslation();
@@ -42,19 +41,19 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
 
   const handleResetCache = async () => {
     Alert.alert(
-      'Reset Local Cache',
-      'This will clear cached config, booking history, and dose records.',
+      t('admin.reset_confirm_title'),
+      t('admin.reset_confirm_message'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Reset',
+          text: t('common.retry'),
           style: 'destructive',
           onPress: async () => {
             await StorageService.clearAll();
             await resetDevSettings();
             await switchConfigMode('normal');
             triggerHaptic('success');
-            Alert.alert('Success', 'Cache and resilience settings reset to default.');
+            Alert.alert(t('common.done'), t('admin.storage_cleared'));
           },
         },
       ]
@@ -63,26 +62,17 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          style={{ padding: 4 }}
-        >
-          <Icon name="chevron-left" size={24} color={theme.colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('admin.title')}</Text>
-        <View style={{ width: 24 }} />
-      </View>
+      <AppHeader title={t('admin.title')} />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* 1. Runtime Config Switcher (Normal Day vs Festival Day) */}
         <View style={styles.sectionCard}>
-          <Text style={styles.cardTitle}>{t('admin.config_switcher')}</Text>
-          <Text style={styles.cardSubtitle}>
-            Switches layout colors, section order, items & banner with zero code change
-          </Text>
+          <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
+            {t('admin.config_switcher')}
+          </AppText>
+          <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginBottom: 14 }}>
+            {t('admin.config_switcher_sub')}
+          </AppText>
 
           <View style={styles.buttonGrid}>
             <TouchableOpacity
@@ -91,27 +81,25 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
               style={[
                 styles.switchOption,
                 {
-                  backgroundColor: activeMode === 'normal' ? '#0F766E' : theme.colors.surface,
-                  borderColor: activeMode === 'normal' ? '#0F766E' : theme.colors.border,
+                  backgroundColor: activeMode === 'normal' ? theme.colors.primary : theme.colors.surface,
+                  borderColor: activeMode === 'normal' ? theme.colors.primary : theme.colors.border,
                 },
               ]}
             >
-              <Text
-                style={[
-                  styles.switchOptionTitle,
-                  { color: activeMode === 'normal' ? '#FFFFFF' : theme.colors.textPrimary },
-                ]}
+              <AppText
+                variant="labelLarge"
+                weight="700"
+                color={activeMode === 'normal' ? theme.colors.surface : theme.colors.textPrimary}
+                style={{ marginBottom: 2 }}
               >
-                Standard Day
-              </Text>
-              <Text
-                style={[
-                  styles.switchOptionSub,
-                  { color: activeMode === 'normal' ? '#CCFBF1' : theme.colors.textSecondary },
-                ]}
+                {t('admin.normal_config')}
+              </AppText>
+              <AppText
+                variant="labelSmall"
+                color={activeMode === 'normal' ? theme.colors.surface : theme.colors.textSecondary}
               >
-                Calm Medical Teal
-              </Text>
+                {t('admin.normal_config_desc')}
+              </AppText>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -120,51 +108,51 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
               style={[
                 styles.switchOption,
                 {
-                  backgroundColor: activeMode === 'festival' ? '#C2410C' : theme.colors.surface,
-                  borderColor: activeMode === 'festival' ? '#C2410C' : theme.colors.border,
+                  backgroundColor: activeMode === 'festival' ? theme.colors.primary : theme.colors.surface,
+                  borderColor: activeMode === 'festival' ? theme.colors.primary : theme.colors.border,
                 },
               ]}
             >
-              <Text
-                style={[
-                  styles.switchOptionTitle,
-                  { color: activeMode === 'festival' ? '#FFFFFF' : theme.colors.textPrimary },
-                ]}
+              <AppText
+                variant="labelLarge"
+                weight="700"
+                color={activeMode === 'festival' ? theme.colors.surface : theme.colors.textPrimary}
+                style={{ marginBottom: 2 }}
               >
-                Diwali Festival 🪔
-              </Text>
-              <Text
-                style={[
-                  styles.switchOptionSub,
-                  { color: activeMode === 'festival' ? '#FFEDD5' : theme.colors.textSecondary },
-                ]}
+                {t('admin.festival_config')}
+              </AppText>
+              <AppText
+                variant="labelSmall"
+                color={activeMode === 'festival' ? theme.colors.surface : theme.colors.textSecondary}
               >
-                Festive Saffron & Gold
-              </Text>
+                {t('admin.festival_config_desc')}
+              </AppText>
             </TouchableOpacity>
           </View>
 
           {fromCache ? (
-            <View style={{ marginTop: 10, padding: 8, backgroundColor: '#FEF3C7', borderRadius: 6 }}>
-              <Text style={{ fontSize: 11, fontWeight: '700', color: '#92400E' }}>
-                ℹ Config is currently loaded from Offline Storage Cache
-              </Text>
+            <View style={{ marginTop: 10, padding: 8, backgroundColor: theme.colors.badgeBg, borderRadius: 6 }}>
+              <AppText variant="labelSmall" weight="700" colorKey="primary">
+                {t('admin.loaded_from_cache')}
+              </AppText>
             </View>
           ) : null}
         </View>
 
-        {/* 2. Latency Switcher (0ms, 1000ms, 3000ms) */}
+        {/* 2. Latency Switcher */}
         <View style={styles.sectionCard}>
-          <Text style={styles.cardTitle}>{t('admin.latency_title')}</Text>
-          <Text style={styles.cardSubtitle}>
-            Simulate 4G / 2G / offline network conditions on mid-range Android phones
-          </Text>
+          <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
+            {t('admin.latency_title')}
+          </AppText>
+          <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginBottom: 14 }}>
+            {t('admin.latency_desc')}
+          </AppText>
 
           <View style={styles.buttonGrid}>
             {[
-              { ms: 0, label: '0ms (Fast)' },
-              { ms: 1000, label: '1000ms (4G)' },
-              { ms: 3000, label: '3000ms (Slow)' },
+              { ms: 0, labelKey: 'admin.latency_0' },
+              { ms: 1000, labelKey: 'admin.latency_1000' },
+              { ms: 3000, labelKey: 'admin.latency_3000' },
             ].map(item => {
               const isSelected = devSettings.simulatedLatencyMs === item.ms;
               return (
@@ -182,14 +170,13 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
                     },
                   ]}
                 >
-                  <Text
-                    style={[
-                      styles.switchOptionTitle,
-                      { color: isSelected ? '#FFFFFF' : theme.colors.textPrimary },
-                    ]}
+                  <AppText
+                    variant="labelLarge"
+                    weight="700"
+                    color={isSelected ? theme.colors.surface : theme.colors.textPrimary}
                   >
-                    {item.label}
-                  </Text>
+                    {t(item.labelKey)}
+                  </AppText>
                 </TouchableOpacity>
               );
             })}
@@ -198,18 +185,22 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
 
         {/* 3. Failure & Resilience Toggles */}
         <View style={styles.sectionCard}>
-          <Text style={styles.cardTitle}>Resilience & Failure Switches</Text>
-          <Text style={styles.cardSubtitle}>
-            Simulate server outages and booking conflicts
-          </Text>
+          <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
+            {t('admin.resilience_switches')}
+          </AppText>
+          <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginBottom: 14 }}>
+            {t('admin.resilience_desc')}
+          </AppText>
 
           {/* Force Network Failure (503) */}
           <View style={styles.toggleRow}>
             <View style={styles.toggleInfo}>
-              <Text style={styles.toggleTitle}>{t('admin.failure_toggle')}</Text>
-              <Text style={styles.toggleDesc}>
-                Forces API failure to test offline storage caching & skeleton retry states
-              </Text>
+              <AppText variant="titleMedium" weight="700">
+                {t('admin.failure_toggle')}
+              </AppText>
+              <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+                {t('admin.failure_desc')}
+              </AppText>
             </View>
             <Switch
               value={devSettings.forceFailure}
@@ -221,10 +212,12 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
           {/* Slot Taken Conflict (409) */}
           <View style={styles.toggleRow}>
             <View style={styles.toggleInfo}>
-              <Text style={styles.toggleTitle}>{t('admin.conflict_toggle')}</Text>
-              <Text style={styles.toggleDesc}>
-                Forces 409 conflict during booking to test rollback of optimistic update
-              </Text>
+              <AppText variant="titleMedium" weight="700">
+                {t('admin.conflict_toggle')}
+              </AppText>
+              <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+                {t('admin.conflict_desc')}
+              </AppText>
             </View>
             <Switch
               value={devSettings.simulateSlotConflict}
@@ -236,10 +229,12 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
 
         {/* 4. Language Switcher */}
         <View style={styles.sectionCard}>
-          <Text style={styles.cardTitle}>{t('admin.language')}</Text>
-          <Text style={styles.cardSubtitle}>
-            Switch language between English, Hindi, and Telugu
-          </Text>
+          <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
+            {t('admin.language')}
+          </AppText>
+          <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginBottom: 14 }}>
+            {t('admin.language_desc')}
+          </AppText>
 
           <View style={styles.buttonGrid}>
             {[
@@ -263,14 +258,13 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
                     },
                   ]}
                 >
-                  <Text
-                    style={[
-                      styles.switchOptionTitle,
-                      { color: isSelected ? '#FFFFFF' : theme.colors.textPrimary },
-                    ]}
+                  <AppText
+                    variant="labelLarge"
+                    weight="700"
+                    color={isSelected ? theme.colors.surface : theme.colors.textPrimary}
                   >
                     {item.label}
-                  </Text>
+                  </AppText>
                 </TouchableOpacity>
               );
             })}
@@ -279,13 +273,15 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
 
         {/* 5. Live Remote Config JSON Inspector */}
         <View style={styles.sectionCard}>
-          <Text style={styles.cardTitle}>Live Remote Layout Config (JSON)</Text>
-          <Text style={styles.cardSubtitle}>
+          <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
+            {t('admin.live_json')}
+          </AppText>
+          <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginBottom: 14 }}>
             Version: {config.version} • Sections: {config.sections?.length || 0}
-          </Text>
+          </AppText>
 
           <ScrollView style={styles.jsonPreviewBox} nestedScrollEnabled>
-            <Text style={styles.jsonText}>
+            <AppText variant="bodySmall" colorKey="primary" style={{ fontFamily: 'Courier' }}>
               {JSON.stringify(
                 {
                   version: config.version,
@@ -300,7 +296,7 @@ export const AdminConfigScreen: React.FC = React.memo(() => {
                 null,
                 2
               )}
-            </Text>
+            </AppText>
           </ScrollView>
         </View>
 

@@ -1,23 +1,24 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '../../context/ThemeContext';
-import { usePrescriptions } from '../../context/PrescriptionContext';
+import { useAppTheme } from '@/context/ThemeContext';
+import { usePrescriptions } from '@/context/PrescriptionContext';
 import { createPrescriptionStyles } from './styles';
-import { Prescription } from '../../types/prescription.types';
-import { SearchBar } from '../../components/common/SearchBar';
-import { EmptyState } from '../../components/common/EmptyState';
-import { Skeleton } from '../../components/common/Skeleton';
-import { Icon } from '../../components/icons/Icon';
-import { formatDateDisplay } from '../../utils/formatters';
-import { triggerHaptic } from '../../utils/haptics';
+import { Prescription } from '@/types/prescription.types';
+import { SearchBar } from '@/components/common/SearchBar';
+import { AppText } from '@/components/common/AppText';
+import { AppHeader } from '@/components/common/AppHeader';
+import { EmptyState } from '@/components/common/EmptyState';
+import { Skeleton } from '@/components/common/Skeleton';
+import { Icon } from '@/components/icons/Icon';
+import { formatDateDisplay } from '@/utils/formatters';
+import { triggerHaptic } from '@/utils/haptics';
 import { useTranslation } from 'react-i18next';
 
 export const PrescriptionsScreen: React.FC = React.memo(() => {
@@ -60,11 +61,17 @@ export const PrescriptionsScreen: React.FC = React.memo(() => {
       >
         <View style={styles.cardTopRow}>
           <View style={styles.doctorInfo}>
-            <Text style={styles.doctorName}>{item.doctorName}</Text>
-            <Text style={styles.clinicName}>{item.clinicName}</Text>
+            <AppText variant="titleMedium" weight="700">
+              {item.doctorName}
+            </AppText>
+            <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+              {item.clinicName}
+            </AppText>
             {item.diagnosis ? (
               <View style={styles.diagnosisTag}>
-                <Text style={styles.diagnosisText}>{item.diagnosis}</Text>
+                <AppText variant="labelSmall" weight="600" colorKey="textSecondary">
+                  {item.diagnosis}
+                </AppText>
               </View>
             ) : null}
           </View>
@@ -74,14 +81,14 @@ export const PrescriptionsScreen: React.FC = React.memo(() => {
         <View style={styles.medicinesSummary}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <Icon name="pill" size={14} color={theme.colors.primary} />
-            <Text style={styles.medCountText}>
-              {item.medicines.length} Prescribed Medicines
-            </Text>
+            <AppText variant="labelLarge" weight="700" colorKey="primary">
+              {t('prescriptions.prescribed_medicines', { count: item.medicines.length })}
+            </AppText>
           </View>
 
-          <Text style={styles.dateText}>
+          <AppText variant="bodySmall" colorKey="textSecondary">
             {formatDateDisplay(item.issuedAt)}
-          </Text>
+          </AppText>
         </View>
       </TouchableOpacity>
     );
@@ -89,18 +96,16 @@ export const PrescriptionsScreen: React.FC = React.memo(() => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>{t('prescriptions.title')}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-          <Icon name="file-text" size={20} color={theme.colors.primary} />
-        </View>
-      </View>
+      <AppHeader
+        title={t('prescriptions.title')}
+        showBack={false}
+        rightAction={<Icon name="file-text" size={20} color={theme.colors.primary} />}
+      />
 
       {/* Search Bar */}
       <View style={styles.searchWrapper}>
         <SearchBar
-          placeholder="Search prescriptions or medicines..."
+          placeholder={t('prescriptions.search_placeholder')}
           onSearchChange={setSearchQuery}
         />
       </View>
@@ -116,7 +121,7 @@ export const PrescriptionsScreen: React.FC = React.memo(() => {
         <EmptyState
           iconName="file-text"
           title={t('prescriptions.empty_prescriptions')}
-          description="Prescriptions issued by Tapza partner doctors will appear here automatically."
+          description={t('prescriptions.empty_prescriptions_desc')}
         />
       ) : (
         <FlatList

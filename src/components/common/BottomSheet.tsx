@@ -9,7 +9,7 @@ import {
   Dimensions,
   ViewStyle,
 } from 'react-native';
-import { useAppTheme } from '../../context/ThemeContext';
+import { useAppTheme } from '@/context/ThemeContext';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -64,7 +64,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = React.memo(({
       },
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dy > 120 || gestureState.vy > 0.8) {
-          // Dragged down sufficiently, close
           Animated.timing(translateY, {
             toValue: SCREEN_HEIGHT,
             duration: 200,
@@ -73,7 +72,6 @@ export const BottomSheet: React.FC<BottomSheetProps> = React.memo(({
             onClose();
           });
         } else {
-          // Spring back to top
           Animated.spring(translateY, {
             toValue: 0,
             damping: 25,
@@ -95,7 +93,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = React.memo(({
       animationType="none"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
+      <View style={[styles.overlay, { backgroundColor: theme.colors.overlay }]}>
         <TouchableOpacity
           style={styles.backdrop}
           activeOpacity={1}
@@ -138,7 +136,6 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(15, 23, 42, 0.45)',
   },
   backdrop: {
     position: 'absolute',

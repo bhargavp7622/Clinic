@@ -1,5 +1,6 @@
 import React from 'react';
-import Svg, { Path, Circle, Rect, G } from 'react-native-svg';
+import Svg, { Path, Circle, Rect } from 'react-native-svg';
+import { THEME_COLORS } from '@/common/theme';
 
 export type IconName =
   | 'home'
@@ -43,7 +44,7 @@ interface IconProps {
 export const Icon: React.FC<IconProps> = React.memo(({
   name,
   size = 22,
-  color = '#0F172A',
+  color = THEME_COLORS.normal.textPrimary,
   strokeWidth = 2,
 }) => {
   switch (name) {

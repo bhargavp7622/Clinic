@@ -1,6 +1,6 @@
 import React from 'react';
 import { Animated } from 'react-native';
-import { SectionConfig } from '../../../types/config.types';
+import { SectionConfig } from '@/types/config.types';
 import { SectionWrapper } from './SectionWrapper';
 import { HeroBannerSection } from './HeroBannerSection';
 import { CategoryChipsSection } from './CategoryChipsSection';

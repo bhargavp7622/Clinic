@@ -44,3 +44,18 @@ jest.mock('react-native-safe-area-context', () => ({
   SafeAreaInsetsContext: mockSafeAreaInsetsContext,
   SafeAreaFrameContext: mockSafeAreaFrameContext,
 }));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: {
+      changeLanguage: () => Promise.resolve(),
+      language: 'en',
+    },
+  }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: jest.fn(),
+  },
+}));
+

@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { OfferStripItem } from '../../../types/config.types';
-import { useAppTheme } from '../../../context/ThemeContext';
-import { Icon } from '../../../components/icons/Icon';
-import { triggerHaptic } from '../../../utils/haptics';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { OfferStripItem } from '@/types/config.types';
+import { useAppTheme } from '@/context/ThemeContext';
+import { AppText } from '@/components/common/AppText';
+import { Icon } from '@/components/icons/Icon';
+import { triggerHaptic } from '@/utils/haptics';
+import { useTranslation } from 'react-i18next';
 
 interface OfferStripSectionProps {
   items?: OfferStripItem[];
@@ -15,6 +17,7 @@ export const OfferStripSection: React.FC<OfferStripSectionProps> = React.memo(({
   onActionPress,
 }) => {
   const theme = useAppTheme();
+  const { t } = useTranslation();
   const offer = items?.[0];
 
   if (!offer) return null;
@@ -24,6 +27,8 @@ export const OfferStripSection: React.FC<OfferStripSectionProps> = React.memo(({
     onActionPress?.();
   };
 
+  const offerText = offer.text ? t(offer.text, { defaultValue: offer.text }) : '';
+
   return (
     <View style={[styles.container, { paddingHorizontal: theme.spacing.md }]}>
       <TouchableOpacity
@@ -32,8 +37,8 @@ export const OfferStripSection: React.FC<OfferStripSectionProps> = React.memo(({
         style={[
           styles.banner,
           {
-            backgroundColor: theme.isFestival ? '#FEF3C7' : '#ECFDF5',
-            borderColor: theme.isFestival ? '#FDE68A' : '#A7F3D0',
+            backgroundColor: theme.colors.badgeBg,
+            borderColor: theme.colors.border,
             borderRadius: theme.borderRadius.md,
             padding: theme.spacing.sm,
             minHeight: theme.minTouchTarget,
@@ -44,33 +49,32 @@ export const OfferStripSection: React.FC<OfferStripSectionProps> = React.memo(({
           <Icon
             name="gift"
             size={18}
-            color={theme.isFestival ? '#C2410C' : '#0F766E'}
+            color={theme.colors.primary}
           />
         </View>
 
-        <Text
-          style={[
-            styles.text,
-            {
-              color: theme.isFestival ? '#78350F' : '#065F46',
-              fontSize: theme.typography.bodySmall.fontSize,
-            },
-          ]}
+        <AppText
+          variant="bodySmall"
+          weight="600"
+          colorKey="textPrimary"
           numberOfLines={2}
+          style={{ flex: 1, lineHeight: 16 }}
         >
-          {offer.text}
-        </Text>
+          {offerText}
+        </AppText>
 
         {offer.couponCode ? (
           <View
             style={[
               styles.couponBadge,
               {
-                backgroundColor: theme.isFestival ? '#EA580C' : '#0F766E',
+                backgroundColor: theme.colors.primary,
               },
             ]}
           >
-            <Text style={styles.couponText}>{offer.couponCode}</Text>
+            <AppText variant="labelSmall" weight="800" color={theme.colors.surface}>
+              {offer.couponCode}
+            </AppText>
           </View>
         ) : null}
       </TouchableOpacity>
@@ -91,21 +95,10 @@ const styles = StyleSheet.create({
   iconCol: {
     marginRight: 8,
   },
-  text: {
-    flex: 1,
-    fontWeight: '600',
-    lineHeight: 16,
-  },
   couponBadge: {
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
     marginLeft: 8,
-  },
-  couponText: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: '800',
-    letterSpacing: 0.5,
   },
 });

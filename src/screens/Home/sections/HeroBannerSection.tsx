@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
-import { HeroBannerItem } from '../../../types/config.types';
-import { useAppTheme } from '../../../context/ThemeContext';
-import { Button } from '../../../components/common/Button';
-import { Icon } from '../../../components/icons/Icon';
+import { View, StyleSheet, Animated } from 'react-native';
+import { HeroBannerItem } from '@/types/config.types';
+import { useAppTheme } from '@/context/ThemeContext';
+import { Button } from '@/components/common/Button';
+import { AppText } from '@/components/common/AppText';
+import { Icon } from '@/components/icons/Icon';
+import { useTranslation } from 'react-i18next';
 
 interface HeroBannerSectionProps {
   items?: HeroBannerItem[];
@@ -17,11 +19,11 @@ export const HeroBannerSection: React.FC<HeroBannerSectionProps> = React.memo(({
   onCtaPress,
 }) => {
   const theme = useAppTheme();
+  const { t } = useTranslation();
   const banner = items?.[0];
 
   if (!banner) return null;
 
-  // Parallax transform on scroll
   const parallaxTranslate = scrollY
     ? scrollY.interpolate({
         inputRange: [-100, 0, 100],
@@ -29,6 +31,11 @@ export const HeroBannerSection: React.FC<HeroBannerSectionProps> = React.memo(({
         extrapolate: 'clamp',
       })
     : 0;
+
+  const greetingText = banner.greeting ? t(banner.greeting, { defaultValue: banner.greeting }) : t('home.greeting_patient');
+  const titleText = banner.title ? t(banner.title, { defaultValue: banner.title }) : '';
+  const subtitleText = banner.subtitle ? t(banner.subtitle, { defaultValue: banner.subtitle }) : '';
+  const ctaText = banner.ctaText ? t(banner.ctaText, { defaultValue: banner.ctaText }) : t('home.hero_cta');
 
   return (
     <Animated.View
@@ -45,50 +52,53 @@ export const HeroBannerSection: React.FC<HeroBannerSectionProps> = React.memo(({
           styles.bannerCard,
           {
             borderRadius: theme.borderRadius.xl,
-            backgroundColor: 'rgba(255, 255, 255, 0.12)',
+            backgroundColor: theme.colors.badgeBg,
+            borderColor: theme.colors.border,
             padding: theme.spacing.lg,
+            borderWidth: 1,
+            ...theme.shadows.card,
           },
         ]}
       >
         {/* Top Tag */}
         <View style={styles.tagContainer}>
-          <View style={styles.tagBadge}>
-            <Icon name="sparkles" size={14} color="#FDE047" />
-            <Text style={styles.tagText}>
-              {banner.greeting || 'Namaste! Welcome to Tapza Care'}
-            </Text>
+          <View style={[styles.tagBadge, { backgroundColor: theme.colors.surface }]}>
+            <Icon name="sparkles" size={14} color={theme.colors.accent} />
+            <AppText variant="labelSmall" weight="700" colorKey="primary">
+              {greetingText}
+            </AppText>
           </View>
         </View>
 
         {/* Title */}
-        <Text style={styles.title}>{banner.title}</Text>
+        <AppText
+          variant="headlineLarge"
+          weight="800"
+          colorKey="textPrimary"
+          style={{ marginBottom: 6 }}
+        >
+          {titleText}
+        </AppText>
 
         {/* Subtitle */}
-        {banner.subtitle ? (
-          <Text style={styles.subtitle}>{banner.subtitle}</Text>
+        {subtitleText ? (
+          <AppText
+            variant="bodyMedium"
+            colorKey="textSecondary"
+            style={{ marginBottom: 16 }}
+          >
+            {subtitleText}
+          </AppText>
         ) : null}
 
         {/* Action Button */}
-        {banner.ctaText ? (
+        {ctaText ? (
           <View style={styles.buttonWrapper}>
             <Button
-              title={banner.ctaText}
+              title={ctaText}
               onPress={() => onCtaPress?.(banner.ctaAction)}
-              variant={theme.isFestival ? 'festival' : 'primary'}
-              style={{
-                backgroundColor: theme.isFestival ? '#FDE047' : '#FFFFFF',
-              }}
-              textStyle={{
-                color: theme.isFestival ? '#78350F' : theme.colors.primary,
-                fontWeight: '800',
-              }}
-              icon={
-                <Icon
-                  name="calendar-plus"
-                  size={16}
-                  color={theme.isFestival ? '#78350F' : theme.colors.primary}
-                />
-              }
+              variant="primary"
+              icon={<Icon name="calendar-plus" size={16} color={theme.colors.surface} />}
             />
           </View>
         ) : null}
@@ -102,10 +112,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 4,
   },
-  bannerCard: {
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.25)',
-  },
+  bannerCard: {},
   tagContainer: {
     flexDirection: 'row',
     marginBottom: 10,
@@ -113,29 +120,10 @@ const styles = StyleSheet.create({
   tagBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 9999,
     gap: 6,
-  },
-  tagText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  title: {
-    fontSize: 21,
-    fontWeight: '800',
-    color: '#FFFFFF',
-    lineHeight: 28,
-    marginBottom: 6,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: 'rgba(255, 255, 255, 0.9)',
-    lineHeight: 18,
-    marginBottom: 16,
   },
   buttonWrapper: {
     alignSelf: 'flex-start',

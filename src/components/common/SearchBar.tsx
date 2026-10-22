@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
-import { useAppTheme } from '../../context/ThemeContext';
-import { Icon } from '../icons/Icon';
-import { useDebounce } from '../../hooks/useDebounce';
+import { View, TextInput, TouchableOpacity, ViewStyle } from 'react-native';
+import { useAppTheme } from '@/context/ThemeContext';
+import { Icon } from '@/components/icons/Icon';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface SearchBarProps {
   placeholder?: string;
@@ -43,7 +43,7 @@ export const SearchBar: React.FC<SearchBarProps> = React.memo(({
           flexDirection: 'row',
           alignItems: 'center',
           paddingHorizontal: theme.spacing.md,
-          minHeight: theme.minTouchTarget, // ensures 44pt tap target
+          minHeight: theme.minTouchTarget, // Accessible 44pt target
           ...theme.shadows.subtle,
         },
         style,

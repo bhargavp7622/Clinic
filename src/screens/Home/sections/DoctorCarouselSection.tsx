@@ -1,17 +1,12 @@
 import React from 'react';
-import {
-  ScrollView,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import { DoctorCarouselItem } from '../../../types/config.types';
-import { useAppTheme } from '../../../context/ThemeContext';
-import { formatCurrencyInr } from '../../../utils/formatters';
-import { Icon } from '../../../components/icons/Icon';
-import { triggerHaptic } from '../../../utils/haptics';
+import { ScrollView, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { DoctorCarouselItem } from '@/types/config.types';
+import { useAppTheme } from '@/context/ThemeContext';
+import { formatCurrencyInr } from '@/utils/formatters';
+import { AppText } from '@/components/common/AppText';
+import { Icon } from '@/components/icons/Icon';
+import { triggerHaptic } from '@/utils/haptics';
+import { useTranslation } from 'react-i18next';
 
 interface DoctorCarouselSectionProps {
   items?: DoctorCarouselItem[];
@@ -23,6 +18,7 @@ export const DoctorCarouselSection: React.FC<DoctorCarouselSectionProps> = React
   onDoctorPress,
 }) => {
   const theme = useAppTheme();
+  const { t } = useTranslation();
 
   if (!items || items.length === 0) return null;
 
@@ -67,38 +63,27 @@ export const DoctorCarouselSection: React.FC<DoctorCarouselSectionProps> = React
             />
             <View style={styles.infoCol}>
               <View style={styles.ratingRow}>
-                <Icon name="star" size={13} color="#F59E0B" />
-                <Text style={styles.ratingText}>{doctor.rating.toFixed(1)}</Text>
-                <Text style={[styles.clinicLocation, { color: theme.colors.textSecondary }]} numberOfLines={1}>
+                <Icon name="star" size={13} color={theme.colors.warning} />
+                <AppText variant="bodySmall" weight="700" colorKey="warning" style={{ marginLeft: 3 }}>
+                  {doctor.rating.toFixed(1)}
+                </AppText>
+                <AppText
+                  variant="bodySmall"
+                  colorKey="textSecondary"
+                  numberOfLines={1}
+                  style={{ marginLeft: 4, flex: 1 }}
+                >
                   • {doctor.clinicName.split(',')[1] || 'Clinic'}
-                </Text>
+                </AppText>
               </View>
 
-              <Text
-                style={[
-                  styles.doctorName,
-                  {
-                    color: theme.colors.textPrimary,
-                    fontSize: theme.typography.titleMedium.fontSize,
-                  },
-                ]}
-                numberOfLines={1}
-              >
+              <AppText variant="titleMedium" weight="700" numberOfLines={1}>
                 {doctor.name}
-              </Text>
+              </AppText>
 
-              <Text
-                style={[
-                  styles.specialty,
-                  {
-                    color: theme.colors.textSecondary,
-                    fontSize: theme.typography.bodySmall.fontSize,
-                  },
-                ]}
-                numberOfLines={1}
-              >
+              <AppText variant="bodySmall" colorKey="textSecondary" numberOfLines={1} style={{ marginTop: 1 }}>
                 {doctor.specialty}
-              </Text>
+              </AppText>
             </View>
           </View>
 
@@ -110,9 +95,9 @@ export const DoctorCarouselSection: React.FC<DoctorCarouselSectionProps> = React
                   key={idx}
                   style={[styles.langChip, { backgroundColor: theme.colors.divider }]}
                 >
-                  <Text style={[styles.langText, { color: theme.colors.textSecondary }]}>
+                  <AppText variant="labelSmall" weight="600" colorKey="textSecondary">
                     {lang}
-                  </Text>
+                  </AppText>
                 </View>
               ))}
             </View>
@@ -123,35 +108,27 @@ export const DoctorCarouselSection: React.FC<DoctorCarouselSectionProps> = React
             style={[
               styles.footer,
               {
-                backgroundColor: theme.isFestival ? '#FFFBEB' : '#F8FAFC',
+                backgroundColor: theme.colors.badgeBg,
                 borderTopColor: theme.colors.border,
               },
             ]}
           >
             <View>
-              <Text style={[styles.slotLabel, { color: theme.colors.textSecondary }]}>
+              <AppText variant="labelSmall" colorKey="textSecondary" style={{ marginBottom: 2 }}>
                 Next Available
-              </Text>
+              </AppText>
               <View style={styles.slotTimeRow}>
                 <Icon name="clock" size={12} color={theme.colors.primary} />
-                <Text
-                  style={[
-                    styles.slotTime,
-                    {
-                      color: theme.colors.primary,
-                      fontSize: theme.typography.labelSmall.fontSize,
-                    },
-                  ]}
-                >
+                <AppText variant="labelSmall" weight="700" colorKey="primary">
                   {doctor.nextSlot}
-                </Text>
+                </AppText>
               </View>
             </View>
 
             <View style={styles.feeWrapper}>
-              <Text style={[styles.feeText, { color: theme.colors.textPrimary }]}>
+              <AppText variant="titleLarge" weight="800">
                 {formatCurrencyInr(doctor.feeInr)}
-              </Text>
+              </AppText>
               <View
                 style={[
                   styles.bookBtn,
@@ -161,7 +138,9 @@ export const DoctorCarouselSection: React.FC<DoctorCarouselSectionProps> = React
                   },
                 ]}
               >
-                <Text style={styles.bookBtnText}>Book</Text>
+                <AppText variant="labelSmall" weight="700" color={theme.colors.surface}>
+                  {t('common.book')}
+                </AppText>
               </View>
             </View>
           </View>
@@ -201,23 +180,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 2,
   },
-  ratingText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#D97706',
-    marginLeft: 3,
-  },
-  clinicLocation: {
-    fontSize: 11,
-    marginLeft: 4,
-    flex: 1,
-  },
-  doctorName: {
-    fontWeight: '700',
-  },
-  specialty: {
-    marginTop: 1,
-  },
   langRow: {
     flexDirection: 'row',
     paddingHorizontal: 12,
@@ -229,10 +191,6 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 4,
   },
-  langText: {
-    fontSize: 10,
-    fontWeight: '600',
-  },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -241,35 +199,18 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderTopWidth: 1,
   },
-  slotLabel: {
-    fontSize: 10,
-    fontWeight: '500',
-    marginBottom: 2,
-  },
   slotTimeRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-  },
-  slotTime: {
-    fontWeight: '700',
   },
   feeWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
-  feeText: {
-    fontSize: 14,
-    fontWeight: '800',
-  },
   bookBtn: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-  },
-  bookBtnText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '700',
   },
 });

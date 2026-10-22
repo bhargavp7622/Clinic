@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
-import { useAppTheme } from '../../context/ThemeContext';
+import { View, ViewStyle } from 'react-native';
+import { useAppTheme } from '@/context/ThemeContext';
 import { Button } from './Button';
-import { Icon, IconName } from '../icons/Icon';
+import { AppText } from './AppText';
+import { Icon, IconName } from '@/components/icons/Icon';
 
 interface EmptyStateProps {
   iconName?: IconName;
@@ -49,30 +50,28 @@ export const EmptyState: React.FC<EmptyStateProps> = React.memo(({
         <Icon name={iconName} size={36} color={theme.colors.textSecondary} />
       </View>
 
-      <Text
-        style={{
-          fontSize: theme.typography.headlineMedium.fontSize,
-          fontWeight: '700',
-          color: theme.colors.textPrimary,
-          textAlign: 'center',
-          marginBottom: theme.spacing.xs,
-        }}
+      <AppText
+        variant="headlineMedium"
+        weight="700"
+        align="center"
+        colorKey="textPrimary"
+        style={{ marginBottom: theme.spacing.xs }}
       >
         {title}
-      </Text>
+      </AppText>
 
-      <Text
+      <AppText
+        variant="bodyMedium"
+        align="center"
+        colorKey="textSecondary"
         style={{
-          fontSize: theme.typography.bodyMedium.fontSize,
-          color: theme.colors.textSecondary,
-          textAlign: 'center',
           lineHeight: 20,
           marginBottom: actionTitle ? theme.spacing.lg : 0,
           maxWidth: 280,
         }}
       >
         {description}
-      </Text>
+      </AppText>
 
       {actionTitle && onActionPress ? (
         <Button title={actionTitle} onPress={onActionPress} variant="primary" />

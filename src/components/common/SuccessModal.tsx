@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, Modal, Animated, StyleSheet, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../context/ThemeContext';
+import { View, Modal, Animated } from 'react-native';
+import { useAppTheme } from '@/context/ThemeContext';
 import { Button } from './Button';
-import { Icon } from '../icons/Icon';
-import { Booking } from '../../types/booking.types';
-import { formatCurrencyInr } from '../../utils/formatters';
+import { AppText } from './AppText';
+import { Icon } from '@/components/icons/Icon';
+import { Booking } from '@/types/booking.types';
+import { formatCurrencyInr } from '@/utils/formatters';
+import { useTranslation } from 'react-i18next';
 
 interface SuccessModalProps {
   visible: boolean;
@@ -18,6 +20,7 @@ export const SuccessModal: React.FC<SuccessModalProps> = React.memo(({
   onClose,
 }) => {
   const theme = useAppTheme();
+  const { t } = useTranslation();
   const scaleAnim = useRef(new Animated.Value(0.4)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -74,39 +77,34 @@ export const SuccessModal: React.FC<SuccessModalProps> = React.memo(({
               width: 80,
               height: 80,
               borderRadius: 40,
-              backgroundColor: '#DCFCE7',
+              backgroundColor: theme.colors.badgeBg,
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: theme.spacing.md,
-              borderWidth: 4,
-              borderColor: '#86EFAC',
+              borderWidth: 3,
+              borderColor: theme.colors.primary,
             }}
           >
-            <Icon name="check" size={44} color="#15803D" strokeWidth={3} />
+            <Icon name="check" size={44} color={theme.colors.primary} strokeWidth={3} />
           </View>
 
-          <Text
-            style={{
-              fontSize: theme.typography.headlineLarge.fontSize,
-              fontWeight: '800',
-              color: theme.colors.textPrimary,
-              textAlign: 'center',
-              marginBottom: 6,
-            }}
+          <AppText
+            variant="headlineLarge"
+            weight="800"
+            align="center"
+            style={{ marginBottom: 6 }}
           >
-            Booking Confirmed!
-          </Text>
+            {t('booking.booking_success')}
+          </AppText>
 
-          <Text
-            style={{
-              fontSize: theme.typography.bodyMedium.fontSize,
-              color: theme.colors.textSecondary,
-              textAlign: 'center',
-              marginBottom: theme.spacing.lg,
-            }}
+          <AppText
+            variant="bodyMedium"
+            align="center"
+            colorKey="textSecondary"
+            style={{ marginBottom: theme.spacing.lg }}
           >
-            Instant confirmation sent to WhatsApp
-          </Text>
+            {t('booking.booking_success_desc')}
+          </AppText>
 
           {/* Details Card */}
           <View
@@ -120,39 +118,49 @@ export const SuccessModal: React.FC<SuccessModalProps> = React.memo(({
             }}
           >
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 13, color: theme.colors.textSecondary }}>Doctor</Text>
-              <Text style={{ fontSize: 13, fontWeight: '700', color: theme.colors.textPrimary }}>
+              <AppText variant="bodySmall" colorKey="textSecondary">
+                {t('booking.doctor')}
+              </AppText>
+              <AppText variant="bodySmall" weight="700">
                 {booking.doctorName}
-              </Text>
+              </AppText>
             </View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 13, color: theme.colors.textSecondary }}>Date & Slot</Text>
-              <Text style={{ fontSize: 13, fontWeight: '700', color: theme.colors.primary }}>
+              <AppText variant="bodySmall" colorKey="textSecondary">
+                {t('booking.date_and_slot')}
+              </AppText>
+              <AppText variant="bodySmall" weight="700" colorKey="primary">
                 {booking.date} • {booking.startsAt}
-              </Text>
+              </AppText>
             </View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 13, color: theme.colors.textSecondary }}>Consultation Fee</Text>
-              <Text style={{ fontSize: 13, fontWeight: '700', color: theme.colors.textPrimary }}>
+              <AppText variant="bodySmall" colorKey="textSecondary">
+                {t('booking.consultation_fee')}
+              </AppText>
+              <AppText variant="bodySmall" weight="700">
                 {formatCurrencyInr(booking.feeInr)}
-              </Text>
+              </AppText>
             </View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 13, color: theme.colors.textSecondary }}>Clinic Location</Text>
-              <Text
-                style={{ fontSize: 12, fontWeight: '600', color: theme.colors.textPrimary, flex: 1, textAlign: 'right', marginLeft: 8 }}
+              <AppText variant="bodySmall" colorKey="textSecondary">
+                {t('booking.clinic_location')}
+              </AppText>
+              <AppText
+                variant="bodySmall"
+                weight="600"
                 numberOfLines={1}
+                style={{ flex: 1, textAlign: 'right', marginLeft: 8 }}
               >
                 {booking.clinicName}
-              </Text>
+              </AppText>
             </View>
           </View>
 
           <Button
-            title="Done & View Appointment"
+            title={t('booking.done_view')}
             onPress={onClose}
             variant="primary"
             style={{ width: '100%' }}

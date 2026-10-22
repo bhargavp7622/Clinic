@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ConfigProvider, useConfig } from './src/context/ConfigContext';
-import { ThemeProvider } from './src/context/ThemeContext';
-import { NetworkProvider } from './src/context/NetworkContext';
-import { BookingProvider } from './src/context/BookingContext';
-import { PrescriptionProvider } from './src/context/PrescriptionContext';
-import { RootNavigator } from './src/navigation/RootNavigator';
-import { initI18n } from './src/i18n';
-import { initApiClient } from './src/api/mockApiClient';
+import { ConfigProvider, useConfig } from '@/context/ConfigContext';
+import { ThemeProvider } from '@/context/ThemeContext';
+import { NetworkProvider } from '@/context/NetworkContext';
+import { BookingProvider } from '@/context/BookingContext';
+import { PrescriptionProvider } from '@/context/PrescriptionContext';
+import { RootNavigator } from '@/navigation/RootNavigator';
+import { initI18n } from '@/i18n';
+import { initApiClient } from '@/api/mockApiClient';
 
-// Inner component that extracts theme dynamically from remote config
 const AppWithTheme: React.FC = () => {
   const { config, activeMode } = useConfig();
 
@@ -46,8 +45,8 @@ export const App: React.FC = () => {
 
   if (!isReady) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F8FAFC' }}>
-        <ActivityIndicator size="large" color="#0F766E" />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" />
       </View>
     );
   }

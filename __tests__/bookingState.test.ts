@@ -1,6 +1,5 @@
-import { MockApiClient, updateApiClientDevSettings, ApiError } from '../src/api/mockApiClient';
-import { generateMockSlots } from '../src/api/mockData';
-import { StorageService } from '../src/services/storage.service';
+import { MockApiClient, updateApiClientDevSettings, ApiError } from '@/api/mockApiClient';
+import { generateMockSlots } from '@/api/mockData';
 
 describe('Booking State & Mock API Tests', () => {
   beforeEach(async () => {

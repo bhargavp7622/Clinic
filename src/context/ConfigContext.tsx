@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { LayoutConfig } from '../types/config.types';
-import { MockApiClient, setRuntimeConfigMode, getRuntimeConfigMode } from '../api/mockApiClient';
-import { NORMAL_LAYOUT_CONFIG } from '../api/mockData';
-import { StorageService } from '../services/storage.service';
+import { LayoutConfig } from '@/types/config.types';
+import { MockApiClient, setRuntimeConfigMode } from '@/api/mockApiClient';
+import { NORMAL_LAYOUT_CONFIG } from '@/api/mockData';
+import { StorageService } from '@/services/storage.service';
 
 interface ConfigContextType {
   config: LayoutConfig;
@@ -48,11 +48,9 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setConfig(result.config);
       setFromCache(result.fromCache);
     } catch (err: any) {
-      console.warn('Config fetch error, checking cached config:', err);
       setIsError(true);
       setErrorMessage(err?.message || 'Failed to fetch layout configuration');
 
-      // Attempt to load cached config
       const cached = await StorageService.getCachedConfig();
       if (cached) {
         setConfig(cached);

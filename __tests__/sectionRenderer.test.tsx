@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
-import { SectionRenderer } from '../src/screens/Home/sections/SectionRenderer';
-import { ThemeProvider } from '../src/context/ThemeContext';
-import { NORMAL_LAYOUT_CONFIG } from '../src/api/mockData';
-import { SectionConfig } from '../src/types/config.types';
+import { SectionRenderer } from '@/screens/Home/sections/SectionRenderer';
+import { ThemeProvider } from '@/context/ThemeContext';
+import { NORMAL_LAYOUT_CONFIG } from '@/api/mockData';
+import { SectionConfig } from '@/types/config.types';
+import { THEME_COLORS } from '@/common/theme';
 
 describe('SectionRenderer Tests', () => {
   it('renders a known section type (offer_strip) without error', () => {
     const offerSection: SectionConfig = {
       id: 'test-offer',
       type: 'offer_strip',
-      background: { kind: 'color', value: '#ECFDF5' },
+      background: { kind: 'color', value: THEME_COLORS.normal.offerBg },
       title: 'Special Offer',
       items: [
         {
@@ -37,7 +38,7 @@ describe('SectionRenderer Tests', () => {
     const unknownSection: SectionConfig = {
       id: 'test-unknown',
       type: 'quantum_teleportation_clinic',
-      background: { kind: 'color', value: '#FFF' },
+      background: { kind: 'color', value: THEME_COLORS.normal.surface },
       title: 'Unknown Widget',
       items: [{ id: '1', name: 'Unknown' }],
     };

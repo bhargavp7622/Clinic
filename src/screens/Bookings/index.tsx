@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import {
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   RefreshControl,
@@ -9,14 +8,16 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '../../context/ThemeContext';
-import { useBooking } from '../../context/BookingContext';
+import { useAppTheme } from '@/context/ThemeContext';
+import { useBooking } from '@/context/BookingContext';
 import { createBookingsListStyles } from './styles';
-import { Booking } from '../../types/booking.types';
-import { Badge } from '../../components/common/Badge';
-import { EmptyState } from '../../components/common/EmptyState';
-import { Icon } from '../../components/icons/Icon';
-import { formatCurrencyInr } from '../../utils/formatters';
+import { Booking } from '@/types/booking.types';
+import { Badge } from '@/components/common/Badge';
+import { AppText } from '@/components/common/AppText';
+import { AppHeader } from '@/components/common/AppHeader';
+import { EmptyState } from '@/components/common/EmptyState';
+import { Icon } from '@/components/icons/Icon';
+import { formatCurrencyInr } from '@/utils/formatters';
 import { useTranslation } from 'react-i18next';
 
 export const BookingsScreen: React.FC = React.memo(() => {
@@ -28,12 +29,12 @@ export const BookingsScreen: React.FC = React.memo(() => {
 
   const handleCancel = (booking: Booking) => {
     Alert.alert(
-      'Cancel Appointment',
-      `Are you sure you want to cancel appointment with ${booking.doctorName}?`,
+      t('common.cancel_appointment'),
+      t('common.cancel_confirm_message', { doctorName: booking.doctorName }),
       [
-        { text: 'No, Keep it', style: 'cancel' },
+        { text: t('common.no_keep'), style: 'cancel' },
         {
-          text: 'Yes, Cancel',
+          text: t('common.yes_cancel'),
           style: 'destructive',
           onPress: () => cancelBooking(booking.id),
         },
@@ -48,37 +49,45 @@ export const BookingsScreen: React.FC = React.memo(() => {
       <View style={styles.card}>
         <View style={styles.topRow}>
           <View style={{ flex: 1, marginRight: 8 }}>
-            <Text style={styles.doctorName}>{item.doctorName}</Text>
-            <Text style={styles.specialty}>{item.specialty}</Text>
+            <AppText variant="titleMedium" weight="700">
+              {item.doctorName}
+            </AppText>
+            <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+              {item.specialty}
+            </AppText>
           </View>
           <Badge
-            label={isPending ? 'Syncing...' : 'Confirmed'}
+            label={isPending ? t('booking.syncing') : t('booking.confirmed')}
             variant={isPending ? 'warning' : 'success'}
           />
         </View>
 
         <View style={styles.dateTimeRow}>
           <Icon name="calendar" size={15} color={theme.colors.primary} />
-          <Text style={styles.dateTimeText}>
+          <AppText variant="labelLarge" weight="700">
             {item.date} • {item.startsAt}
-          </Text>
+          </AppText>
         </View>
 
         <View style={styles.clinicRow}>
           <Icon name="map-pin" size={12} color={theme.colors.textSecondary} />
-          <Text style={styles.clinicText} numberOfLines={1}>
+          <AppText variant="bodySmall" colorKey="textSecondary" numberOfLines={1} style={{ marginLeft: 4 }}>
             {item.clinicName}
-          </Text>
+          </AppText>
         </View>
 
         <View style={styles.bottomRow}>
-          <Text style={styles.feeText}>{formatCurrencyInr(item.feeInr)}</Text>
+          <AppText variant="titleMedium" weight="800">
+            {formatCurrencyInr(item.feeInr)}
+          </AppText>
           <TouchableOpacity
             onPress={() => handleCancel(item)}
             style={styles.cancelBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Text style={styles.cancelText}>Cancel</Text>
+            <AppText variant="labelSmall" weight="600" colorKey="error">
+              {t('common.cancel')}
+            </AppText>
           </TouchableOpacity>
         </View>
       </View>
@@ -87,16 +96,18 @@ export const BookingsScreen: React.FC = React.memo(() => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>{t('booking.my_appointments')}</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('DoctorBooking', {})}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}
-        >
-          <Icon name="calendar-plus" size={20} color={theme.colors.primary} />
-        </TouchableOpacity>
-      </View>
+      <AppHeader
+        title={t('booking.my_appointments')}
+        showBack={false}
+        rightAction={
+          <TouchableOpacity
+            onPress={() => navigation.navigate('DoctorBooking', {})}
+            style={{ padding: 4 }}
+          >
+            <Icon name="calendar-plus" size={22} color={theme.colors.primary} />
+          </TouchableOpacity>
+        }
+      />
 
       {/* Bookings List */}
       {bookings.length === 0 ? (

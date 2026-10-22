@@ -1,4 +1,4 @@
-import { LayoutConfig, SectionConfig } from '../types/config.types';
+import { SectionConfig } from '@/types/config.types';
 
 export interface ValidationResult {
   isValid: boolean;

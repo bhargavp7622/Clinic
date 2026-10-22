@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { Prescription, MedicineTiming } from '../types/prescription.types';
-import { MockApiClient } from '../api/mockApiClient';
-import { StorageService } from '../services/storage.service';
-import { triggerHaptic } from '../utils/haptics';
+import { Prescription, MedicineTiming } from '@/types/prescription.types';
+import { MockApiClient } from '@/api/mockApiClient';
+import { StorageService } from '@/services/storage.service';
+import { triggerHaptic } from '@/utils/haptics';
 
 interface PrescriptionContextType {
   prescriptions: Prescription[];
@@ -92,7 +92,6 @@ export const PrescriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
       triggerHaptic(newStatus ? 'success' : 'light');
 
-      // Optimistic state update
       const key = `${prescriptionId}_${medicineId}_${timing}_${targetDate}`;
       setDoseHistory(prev => {
         const next = { ...prev };
@@ -104,7 +103,6 @@ export const PrescriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         return next;
       });
 
-      // Persist in AsyncStorage
       await StorageService.setDoseTaken(prescriptionId, medicineId, timing, targetDate, newStatus);
       return newStatus;
     },

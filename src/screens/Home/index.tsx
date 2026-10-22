@@ -1,7 +1,6 @@
 import React, { useRef, useMemo, useCallback } from 'react';
 import {
   View,
-  Text,
   Animated,
   RefreshControl,
   TouchableOpacity,
@@ -9,21 +8,22 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useConfig } from '../../context/ConfigContext';
-import { useAppTheme } from '../../context/ThemeContext';
+import { useConfig } from '@/context/ConfigContext';
+import { useAppTheme } from '@/context/ThemeContext';
 import { createHomeStyles } from './styles';
 import { SectionRenderer } from './sections/SectionRenderer';
-import { SearchBar } from '../../components/common/SearchBar';
-import { OfflineBanner } from '../../components/common/OfflineBanner';
+import { SearchBar } from '@/components/common/SearchBar';
+import { OfflineBanner } from '@/components/common/OfflineBanner';
+import { AppText } from '@/components/common/AppText';
 import {
   HeroBannerSkeleton,
   CategoryChipsSkeleton,
   DoctorCardSkeleton,
   ServiceCardSkeleton,
-} from '../../components/common/Skeleton';
-import { Icon } from '../../components/icons/Icon';
+} from '@/components/common/Skeleton';
+import { Icon } from '@/components/icons/Icon';
 import { useTranslation } from 'react-i18next';
-import { triggerHaptic } from '../../utils/haptics';
+import { triggerHaptic } from '@/utils/haptics';
 
 export const HomeScreen: React.FC = React.memo(() => {
   const navigation = useNavigation<any>();
@@ -32,10 +32,8 @@ export const HomeScreen: React.FC = React.memo(() => {
   const { config, isLoading, refreshConfig } = useConfig();
   const { t } = useTranslation();
 
-  // Scroll parallax & header shrinking animation
   const scrollY = useRef(new Animated.Value(0)).current;
 
-  // Header shrinking interpolations
   const headerElevation = scrollY.interpolate({
     inputRange: [0, 40],
     outputRange: [0, 4],
@@ -73,12 +71,13 @@ export const HomeScreen: React.FC = React.memo(() => {
   const handleSearchChange = useCallback(
     (query: string) => {
       if (query.trim().length > 0) {
-        // Direct search leads to doctor booking/filtering
         navigation.navigate('DoctorBooking', { preselectedQuery: query });
       }
     },
     [navigation]
   );
+
+  const festivalName = config.theme.festival?.name ? t(config.theme.festival.name, { defaultValue: config.theme.festival.name }) : '';
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -105,10 +104,10 @@ export const HomeScreen: React.FC = React.memo(() => {
             onPress={handleNavigateAdmin}
             style={styles.festivalBannerStrip}
           >
-            <Icon name="sparkles" size={13} color="#78350F" />
-            <Text style={styles.festivalBannerText}>
-              {config.theme.festival.name} • Tap for Festive Settings
-            </Text>
+            <Icon name="sparkles" size={13} color={theme.colors.surface} />
+            <AppText variant="labelSmall" weight="800" color={theme.colors.surface}>
+              {festivalName}
+            </AppText>
           </TouchableOpacity>
         ) : null}
 
@@ -122,13 +121,15 @@ export const HomeScreen: React.FC = React.memo(() => {
                 color={theme.colors.primary}
                 strokeWidth={2.5}
               />
-              <Text style={styles.brandTitle}>Tapza Care</Text>
+              <AppText variant="headlineMedium" weight="800" colorKey="primary" style={{ letterSpacing: -0.4 }}>
+                {t('common.app_name')}
+              </AppText>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
               <Icon name="map-pin" size={11} color={theme.colors.textSecondary} />
-              <Text style={[styles.locationSubtext, { marginLeft: 3 }]}>
+              <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginLeft: 3 }}>
                 {t('home.location')}
-              </Text>
+              </AppText>
             </View>
           </View>
 
@@ -140,15 +141,15 @@ export const HomeScreen: React.FC = React.memo(() => {
               style={[
                 styles.adminButton,
                 {
-                  backgroundColor: theme.isFestival ? '#FED7AA' : theme.colors.divider,
+                  backgroundColor: theme.colors.divider,
                 },
               ]}
-              accessibilityLabel="Admin and resilience switcher"
+              accessibilityLabel={t('common.admin_settings')}
             >
               <Icon
                 name="sliders"
                 size={18}
-                color={theme.isFestival ? '#C2410C' : theme.colors.textPrimary}
+                color={theme.colors.textPrimary}
               />
             </TouchableOpacity>
           </View>
@@ -191,7 +192,6 @@ export const HomeScreen: React.FC = React.memo(() => {
         }
       >
         {isLoading && !config.sections?.length ? (
-          // Precise Skeleton Loaders matching shape of real content
           <View style={styles.skeletonsContainer}>
             <HeroBannerSkeleton />
             <CategoryChipsSkeleton />
@@ -205,7 +205,6 @@ export const HomeScreen: React.FC = React.memo(() => {
             </View>
           </View>
         ) : (
-          // Config-driven sections dynamically rendered in exact order
           config.sections.map(section => (
             <SectionRenderer
               key={section.id}

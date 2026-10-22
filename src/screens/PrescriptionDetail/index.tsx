@@ -1,23 +1,19 @@
 import React, { useMemo, useCallback } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '../../context/ThemeContext';
-import { usePrescriptions } from '../../context/PrescriptionContext';
+import { useRoute } from '@react-navigation/native';
+import { useAppTheme } from '@/context/ThemeContext';
+import { usePrescriptions } from '@/context/PrescriptionContext';
 import { createPrescriptionDetailStyles } from './styles';
-import { Medicine, MedicineTiming } from '../../types/prescription.types';
-import { Icon } from '../../components/icons/Icon';
-import { formatDateDisplay } from '../../utils/formatters';
+import { Medicine, MedicineTiming } from '@/types/prescription.types';
+import { AppHeader } from '@/components/common/AppHeader';
+import { AppText } from '@/components/common/AppText';
+import { Icon } from '@/components/icons/Icon';
+import { formatDateDisplay } from '@/utils/formatters';
 import { useTranslation } from 'react-i18next';
 
 export const PrescriptionDetailScreen: React.FC = React.memo(() => {
   const route = useRoute<any>();
-  const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = useMemo(() => createPrescriptionDetailStyles(theme), [theme]);
   const { t } = useTranslation();
@@ -36,21 +32,15 @@ export const PrescriptionDetailScreen: React.FC = React.memo(() => {
   if (!prescription) {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 4 }}>
-            <Icon name="chevron-left" size={24} color={theme.colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Prescription Details</Text>
-          <View style={{ width: 24 }} />
-        </View>
+        <AppHeader title={t('prescriptions.details_title')} />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ color: theme.colors.textSecondary }}>Prescription not found.</Text>
+          <AppText colorKey="textSecondary">{t('prescriptions.not_found')}</AppText>
         </View>
       </SafeAreaView>
     );
   }
 
-  const renderTimingButton = (med: Medicine, timing: MedicineTiming, label: string, icon: any) => {
+  const renderTimingButton = (med: Medicine, timing: MedicineTiming, label: string) => {
     const isApplicable = med.timing.includes(timing);
     if (!isApplicable) {
       return (
@@ -65,12 +55,12 @@ export const PrescriptionDetailScreen: React.FC = React.memo(() => {
             },
           ]}
         >
-          <Text style={[styles.timingLabel, { color: theme.colors.textSecondary }]}>
+          <AppText variant="labelSmall" weight="700" colorKey="textSecondary" style={{ marginBottom: 3 }}>
             {label}
-          </Text>
-          <Text style={[styles.statusLabel, { color: theme.colors.textSecondary }]}>
+          </AppText>
+          <AppText variant="labelSmall" colorKey="textSecondary">
             —
-          </Text>
+          </AppText>
         </View>
       );
     }
@@ -85,54 +75,39 @@ export const PrescriptionDetailScreen: React.FC = React.memo(() => {
         style={[
           styles.timingButton,
           {
-            backgroundColor: taken ? '#DCFCE7' : theme.colors.surface,
-            borderColor: taken ? '#22C55E' : theme.colors.border,
+            backgroundColor: taken ? theme.colors.badgeBg : theme.colors.surface,
+            borderColor: taken ? theme.colors.success : theme.colors.border,
           },
         ]}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           {taken ? (
-            <Icon name="check-circle" size={13} color="#15803D" strokeWidth={2.5} />
+            <Icon name="check-circle" size={13} color={theme.colors.success} strokeWidth={2.5} />
           ) : null}
-          <Text
-            style={[
-              styles.timingLabel,
-              { color: taken ? '#15803D' : theme.colors.textPrimary },
-            ]}
+          <AppText
+            variant="labelSmall"
+            weight="700"
+            color={taken ? theme.colors.success : theme.colors.textPrimary}
+            style={{ marginBottom: 3 }}
           >
             {label}
-          </Text>
+          </AppText>
         </View>
 
-        <Text
-          style={[
-            styles.statusLabel,
-            {
-              color: taken ? '#15803D' : theme.colors.textSecondary,
-              fontWeight: taken ? '700' : '500',
-            },
-          ]}
+        <AppText
+          variant="labelSmall"
+          weight={taken ? '700' : '500'}
+          color={taken ? theme.colors.success : theme.colors.textSecondary}
         >
           {taken ? t('prescriptions.taken') : t('prescriptions.mark_as_taken')}
-        </Text>
+        </AppText>
       </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          style={{ padding: 4 }}
-        >
-          <Icon name="chevron-left" size={24} color={theme.colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Prescription & Schedule</Text>
-        <View style={{ width: 24 }} />
-      </View>
+      <AppHeader title={t('prescriptions.details_title')} />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Clinic & Doctor Header Card */}
@@ -142,29 +117,39 @@ export const PrescriptionDetailScreen: React.FC = React.memo(() => {
               <Icon name="stethoscope" size={22} color={theme.colors.primary} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.doctorTitle}>{prescription.doctorName}</Text>
-              <Text style={styles.clinicSubtitle}>{prescription.clinicName}</Text>
-              <Text style={{ fontSize: 11, color: theme.colors.textSecondary, marginTop: 2 }}>
-                Issued: {formatDateDisplay(prescription.issuedAt)}
-              </Text>
+              <AppText variant="titleMedium" weight="700">
+                {prescription.doctorName}
+              </AppText>
+              <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+                {prescription.clinicName}
+              </AppText>
+              <AppText variant="labelSmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+                {t('prescriptions.issued_on', { date: formatDateDisplay(prescription.issuedAt) })}
+              </AppText>
             </View>
           </View>
 
           {prescription.diagnosis ? (
             <View style={styles.diagnosisBanner}>
-              <Text style={styles.diagnosisLabel}>Diagnosis / Health Reason</Text>
-              <Text style={styles.diagnosisValue}>{prescription.diagnosis}</Text>
+              <AppText variant="labelSmall" weight="600" colorKey="textSecondary">
+                {t('prescriptions.diagnosis_reason')}
+              </AppText>
+              <AppText variant="bodyMedium" weight="700" style={{ marginTop: 2 }}>
+                {prescription.diagnosis}
+              </AppText>
             </View>
           ) : null}
         </View>
 
         {/* Schedule Header */}
         <View style={styles.scheduleSectionHeader}>
-          <Text style={styles.scheduleSectionTitle}>
+          <AppText variant="titleLarge" weight="800">
             {t('prescriptions.dose_schedule')}
-          </Text>
+          </AppText>
           <View style={styles.todayBadge}>
-            <Text style={styles.todayBadgeText}>Today: {todayDateStr}</Text>
+            <AppText variant="labelSmall" weight="700" colorKey="badgeText">
+              {t('prescriptions.today', { date: todayDateStr })}
+            </AppText>
           </View>
         </View>
 
@@ -172,25 +157,35 @@ export const PrescriptionDetailScreen: React.FC = React.memo(() => {
         {prescription.medicines.map(med => (
           <View key={med.id} style={styles.medicineCard}>
             <View style={styles.medHeader}>
-              <Text style={styles.medName}>{med.name}</Text>
+              <AppText variant="titleMedium" weight="700" style={{ flex: 1, marginRight: 8 }}>
+                {med.name}
+              </AppText>
               <View style={styles.daysBadge}>
-                <Text style={styles.daysText}>{med.days} Days</Text>
+                <AppText variant="labelSmall" weight="700" colorKey="textSecondary">
+                  {t('prescriptions.days', { count: med.days })}
+                </AppText>
               </View>
             </View>
 
-            <Text style={styles.medDose}>Dosage: {med.dose}</Text>
+            <AppText variant="bodySmall" weight="600" colorKey="primary" style={{ marginTop: 4 }}>
+              {t('prescriptions.dosage', { dose: med.dose })}
+            </AppText>
 
             {med.instructions ? (
-              <Text style={styles.instructionsText}>
+              <AppText
+                variant="bodySmall"
+                colorKey="textSecondary"
+                style={{ fontStyle: 'italic', marginTop: 6 }}
+              >
                 "{med.instructions}"
-              </Text>
+              </AppText>
             ) : null}
 
             {/* Morning / Afternoon / Night Timing Slots */}
             <View style={styles.timingSlotsContainer}>
-              {renderTimingButton(med, 'morning', t('prescriptions.morning'), 'sunrise')}
-              {renderTimingButton(med, 'afternoon', t('prescriptions.afternoon'), 'sun')}
-              {renderTimingButton(med, 'night', t('prescriptions.night'), 'moon')}
+              {renderTimingButton(med, 'morning', t('prescriptions.morning'))}
+              {renderTimingButton(med, 'afternoon', t('prescriptions.afternoon'))}
+              {renderTimingButton(med, 'night', t('prescriptions.night'))}
             </View>
           </View>
         ))}

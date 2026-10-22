@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { useAppTheme } from '../../context/ThemeContext';
+import { View, ViewStyle, TextStyle } from 'react-native';
+import { useAppTheme } from '@/context/ThemeContext';
+import { AppText } from './AppText';
 
 export type BadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'primary' | 'festival';
 
@@ -24,15 +25,15 @@ export const Badge: React.FC<BadgeProps> = React.memo(({
   const getColors = () => {
     switch (variant) {
       case 'success':
-        return { bg: '#DCFCE7', text: '#15803D' };
+        return { bg: theme.colors.badgeBg, text: theme.colors.success };
       case 'warning':
-        return { bg: '#FEF3C7', text: '#B45309' };
+        return { bg: theme.colors.badgeBg, text: theme.colors.warning };
       case 'error':
-        return { bg: '#FEE2E2', text: '#B91C1C' };
+        return { bg: theme.colors.divider, text: theme.colors.error };
       case 'festival':
-        return { bg: '#FFEDD5', text: '#C2410C' };
+        return { bg: theme.colors.badgeBg, text: theme.colors.primary };
       case 'info':
-        return { bg: '#E0F2FE', text: '#0369A1' };
+        return { bg: theme.colors.badgeBg, text: theme.colors.info };
       case 'primary':
       default:
         return { bg: theme.colors.badgeBg, text: theme.colors.badgeText };
@@ -57,19 +58,14 @@ export const Badge: React.FC<BadgeProps> = React.memo(({
       ]}
     >
       {icon ? <View style={{ marginRight: 4 }}>{icon}</View> : null}
-      <Text
-        style={[
-          {
-            color: text,
-            fontSize: theme.typography.labelSmall.fontSize,
-            fontWeight: '700',
-            letterSpacing: 0.3,
-          },
-          textStyle,
-        ]}
+      <AppText
+        variant="labelSmall"
+        weight="700"
+        color={text}
+        style={textStyle}
       >
         {label}
-      </Text>
+      </AppText>
     </View>
   );
 });

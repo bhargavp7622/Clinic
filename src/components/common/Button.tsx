@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  ActivityIndicator,
-  StyleSheet,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
-import { useAppTheme } from '../../context/ThemeContext';
-import { triggerHaptic } from '../../utils/haptics';
+import { TouchableOpacity, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
+import { useAppTheme } from '@/context/ThemeContext';
+import { triggerHaptic } from '@/utils/haptics';
+import { AppText } from './AppText';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'festival';
 
@@ -45,7 +39,7 @@ export const Button: React.FC<ButtonProps> = React.memo(({
 
   const getContainerStyle = (): ViewStyle => {
     const base: ViewStyle = {
-      minHeight: theme.minTouchTarget, // Ensures 44pt tap target minimum
+      minHeight: theme.minTouchTarget, // Accessible 44pt minimum
       borderRadius: theme.borderRadius.md,
       paddingHorizontal: theme.spacing.md,
       paddingVertical: theme.spacing.sm,
@@ -91,38 +85,17 @@ export const Button: React.FC<ButtonProps> = React.memo(({
     }
   };
 
-  const getTextStyle = (): TextStyle => {
+  const getTextColor = (): string => {
     switch (variant) {
       case 'primary':
-        return {
-          color: '#FFFFFF',
-          fontSize: theme.typography.labelLarge.fontSize,
-          fontWeight: '700',
-        };
+        return theme.colors.surface;
       case 'festival':
-        return {
-          color: '#451A03',
-          fontSize: theme.typography.labelLarge.fontSize,
-          fontWeight: '700',
-        };
+        return theme.colors.textPrimary;
       case 'secondary':
-        return {
-          color: theme.colors.badgeText,
-          fontSize: theme.typography.labelLarge.fontSize,
-          fontWeight: '600',
-        };
+        return theme.colors.badgeText;
       case 'outline':
-        return {
-          color: theme.colors.primary,
-          fontSize: theme.typography.labelLarge.fontSize,
-          fontWeight: '600',
-        };
       case 'text':
-        return {
-          color: theme.colors.primary,
-          fontSize: theme.typography.labelLarge.fontSize,
-          fontWeight: '600',
-        };
+        return theme.colors.primary;
     }
   };
 
@@ -139,20 +112,19 @@ export const Button: React.FC<ButtonProps> = React.memo(({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={variant === 'primary' ? '#FFFFFF' : theme.colors.primary}
+          color={variant === 'primary' ? theme.colors.surface : theme.colors.primary}
         />
       ) : (
         <>
           {icon ? <>{icon}</> : null}
-          <Text
-            style={[
-              getTextStyle(),
-              icon ? { marginLeft: theme.spacing.sm } : null,
-              textStyle,
-            ]}
+          <AppText
+            variant="labelLarge"
+            weight="700"
+            color={getTextColor()}
+            style={[icon ? { marginLeft: theme.spacing.sm } : undefined, textStyle]}
           >
             {title}
-          </Text>
+          </AppText>
         </>
       )}
     </TouchableOpacity>

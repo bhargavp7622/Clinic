@@ -1,18 +1,20 @@
-import React, { useMemo } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useAppTheme } from '../../context/ThemeContext';
-import { useConfig } from '../../context/ConfigContext';
-import { Icon } from '../../components/icons/Icon';
-import { changeLanguage } from '../../i18n';
+import { useAppTheme } from '@/context/ThemeContext';
+import { useConfig } from '@/context/ConfigContext';
+import { AppHeader } from '@/components/common/AppHeader';
+import { AppText } from '@/components/common/AppText';
+import { Icon } from '@/components/icons/Icon';
+import { changeLanguage } from '@/i18n';
 import { useTranslation } from 'react-i18next';
-import { triggerHaptic } from '../../utils/haptics';
+import { triggerHaptic } from '@/utils/haptics';
 
 export const ProfileScreen: React.FC = React.memo(() => {
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
-  const { config, activeMode } = useConfig();
+  const { activeMode } = useConfig();
   const { t, i18n } = useTranslation();
 
   const handleLanguageChange = (lang: 'en' | 'hi' | 'te') => {
@@ -22,20 +24,7 @@ export const ProfileScreen: React.FC = React.memo(() => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
-      {/* Header */}
-      <View
-        style={{
-          paddingHorizontal: theme.spacing.md,
-          paddingVertical: 12,
-          backgroundColor: theme.colors.surface,
-          borderBottomWidth: 1,
-          borderBottomColor: theme.colors.border,
-        }}
-      >
-        <Text style={{ fontSize: 20, fontWeight: '800', color: theme.colors.textPrimary }}>
-          Patient Profile & Family
-        </Text>
-      </View>
+      <AppHeader title={t('profile.title')} showBack={false} />
 
       <ScrollView contentContainerStyle={{ padding: theme.spacing.md, gap: 16 }}>
         {/* Patient Card */}
@@ -65,29 +54,29 @@ export const ProfileScreen: React.FC = React.memo(() => {
             <Icon name="user" size={26} color={theme.colors.primary} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 17, fontWeight: '700', color: theme.colors.textPrimary }}>
+            <AppText variant="titleMedium" weight="700">
               Bhargav Parmar
-            </Text>
-            <Text style={{ fontSize: 13, color: theme.colors.textSecondary, marginTop: 2 }}>
-              +91 98765 43210 • Banjara Hills, Hyderabad
-            </Text>
+            </AppText>
+            <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+              {t('profile.phone_city')}
+            </AppText>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 gap: 4,
                 marginTop: 6,
-                backgroundColor: '#DCFCE7',
+                backgroundColor: theme.colors.badgeBg,
                 paddingHorizontal: 8,
                 paddingVertical: 3,
                 borderRadius: 4,
                 alignSelf: 'flex-start',
               }}
             >
-              <Icon name="check-circle" size={11} color="#15803D" />
-              <Text style={{ fontSize: 10, fontWeight: '700', color: '#15803D' }}>
-                WhatsApp Rx Verified
-              </Text>
+              <Icon name="check-circle" size={11} color={theme.colors.success} />
+              <AppText variant="labelSmall" weight="700" colorKey="success">
+                {t('profile.verified_whatsapp')}
+              </AppText>
             </View>
           </View>
         </View>
@@ -103,18 +92,18 @@ export const ProfileScreen: React.FC = React.memo(() => {
             ...theme.shadows.subtle,
           }}
         >
-          <Text style={{ fontSize: 15, fontWeight: '700', color: theme.colors.textPrimary, marginBottom: 4 }}>
-            App Language (భాష / भाषा)
-          </Text>
-          <Text style={{ fontSize: 12, color: theme.colors.textSecondary, marginBottom: 12 }}>
-            Specially adapted for elder patients and regional families
-          </Text>
+          <AppText variant="titleMedium" weight="700" style={{ marginBottom: 4 }}>
+            {t('profile.app_language')}
+          </AppText>
+          <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginBottom: 12 }}>
+            {t('profile.adapted_for_elders')}
+          </AppText>
 
           <View style={{ flexDirection: 'row', gap: 8 }}>
             {[
               { code: 'en', label: 'English' },
-              { code: 'hi', label: 'हिंदी (Hindi)' },
-              { code: 'te', label: 'తెలుగు (Telugu)' },
+              { code: 'hi', label: 'हिंदी' },
+              { code: 'te', label: 'తెలుగు' },
             ].map(item => {
               const isActive = i18n.language === item.code;
               return (
@@ -134,15 +123,13 @@ export const ProfileScreen: React.FC = React.memo(() => {
                     paddingHorizontal: 6,
                   }}
                 >
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      fontWeight: '700',
-                      color: isActive ? '#FFFFFF' : theme.colors.textPrimary,
-                    }}
+                  <AppText
+                    variant="labelLarge"
+                    weight="700"
+                    color={isActive ? theme.colors.surface : theme.colors.textPrimary}
                   >
                     {item.label}
-                  </Text>
+                  </AppText>
                 </TouchableOpacity>
               );
             })}
@@ -157,10 +144,10 @@ export const ProfileScreen: React.FC = React.memo(() => {
             navigation.navigate('AdminConfig');
           }}
           style={{
-            backgroundColor: theme.isFestival ? '#FFFBEB' : theme.colors.surface,
+            backgroundColor: theme.colors.surface,
             borderRadius: theme.borderRadius.lg,
             borderWidth: 1,
-            borderColor: theme.isFestival ? '#FDE68A' : theme.colors.border,
+            borderColor: theme.colors.border,
             padding: theme.spacing.md,
             flexDirection: 'row',
             alignItems: 'center',
@@ -174,7 +161,7 @@ export const ProfileScreen: React.FC = React.memo(() => {
                 width: 44,
                 height: 44,
                 borderRadius: 22,
-                backgroundColor: theme.isFestival ? '#FED7AA' : theme.colors.divider,
+                backgroundColor: theme.colors.badgeBg,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
@@ -182,12 +169,14 @@ export const ProfileScreen: React.FC = React.memo(() => {
               <Icon name="sliders" size={20} color={theme.colors.primary} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '700', color: theme.colors.textPrimary }}>
-                Admin & Resilience Switcher
-              </Text>
-              <Text style={{ fontSize: 12, color: theme.colors.textSecondary, marginTop: 2 }}>
-                Current: {activeMode === 'festival' ? 'Diwali Festival 🪔' : 'Normal Day (Teal)'}
-              </Text>
+              <AppText variant="titleMedium" weight="700">
+                {t('profile.admin_control')}
+              </AppText>
+              <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
+                {t('profile.current_theme', {
+                  theme: activeMode === 'festival' ? t('admin.festival_config') : t('admin.normal_config'),
+                })}
+              </AppText>
             </View>
           </View>
           <Icon name="chevron-right" size={20} color={theme.colors.textSecondary} />

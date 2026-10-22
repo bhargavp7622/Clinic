@@ -1,26 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { AppTheme } from '../../types/theme.types';
+import { AppTheme } from '@/types/theme.types';
 
 export const createBookingsListStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
-    },
-    header: {
-      paddingHorizontal: theme.spacing.md,
-      paddingVertical: 12,
-      backgroundColor: theme.colors.surface,
-      borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    headerTitle: {
-      fontSize: 20,
-      fontWeight: '800',
-      color: theme.colors.textPrimary,
     },
     listContent: {
       padding: theme.spacing.md,
@@ -41,16 +26,6 @@ export const createBookingsListStyles = (theme: AppTheme) =>
       alignItems: 'flex-start',
       marginBottom: 8,
     },
-    doctorName: {
-      fontSize: 16,
-      fontWeight: '700',
-      color: theme.colors.textPrimary,
-    },
-    specialty: {
-      fontSize: 12,
-      color: theme.colors.textSecondary,
-      marginTop: 2,
-    },
     dateTimeRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -60,19 +35,10 @@ export const createBookingsListStyles = (theme: AppTheme) =>
       padding: 8,
       borderRadius: theme.borderRadius.sm,
     },
-    dateTimeText: {
-      fontSize: 13,
-      fontWeight: '700',
-      color: theme.colors.textPrimary,
-    },
     clinicRow: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: 4,
-    },
-    clinicText: {
-      fontSize: 12,
-      color: theme.colors.textSecondary,
     },
     bottomRow: {
       flexDirection: 'row',
@@ -83,18 +49,8 @@ export const createBookingsListStyles = (theme: AppTheme) =>
       borderTopWidth: 1,
       borderTopColor: theme.colors.divider,
     },
-    feeText: {
-      fontSize: 14,
-      fontWeight: '800',
-      color: theme.colors.textPrimary,
-    },
     cancelBtn: {
       paddingHorizontal: 8,
       paddingVertical: 4,
-    },
-    cancelText: {
-      fontSize: 12,
-      color: theme.colors.error,
-      fontWeight: '600',
     },
   });

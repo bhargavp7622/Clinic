@@ -1,6 +1,7 @@
-import { validateLayoutConfig, sanitizeSections } from '../src/utils/validation';
-import { NORMAL_LAYOUT_CONFIG, FESTIVAL_LAYOUT_CONFIG } from '../src/api/mockData';
-import { SectionConfig } from '../src/types/config.types';
+import { validateLayoutConfig, sanitizeSections } from '@/utils/validation';
+import { NORMAL_LAYOUT_CONFIG, FESTIVAL_LAYOUT_CONFIG } from '@/api/mockData';
+import { SectionConfig } from '@/types/config.types';
+import { THEME_COLORS } from '@/common/theme';
 
 describe('LayoutConfig Validation & Resilience', () => {
   it('validates standard normal layout config successfully', () => {
@@ -18,7 +19,7 @@ describe('LayoutConfig Validation & Resilience', () => {
   it('detects missing theme colors in invalid config', () => {
     const invalidConfig = {
       version: 1,
-      theme: { primary: '#0F766E' }, // Missing secondary, background, surface, etc.
+      theme: { primary: THEME_COLORS.normal.primary }, // Missing secondary, background, surface, etc.
       tabs: [],
       sections: [],
     };
@@ -59,17 +60,17 @@ describe('LayoutConfig Validation & Resilience', () => {
       {
         id: 'sec-1',
         type: 'hero_banner',
-        background: { kind: 'color', value: '#FFF' },
+        background: { kind: 'color', value: THEME_COLORS.normal.surface },
       },
       {
         id: 'sec-2',
         type: 'ai_experimental_drone_delivery', // Unknown type
-        background: { kind: 'color', value: '#FFF' },
+        background: { kind: 'color', value: THEME_COLORS.normal.surface },
       },
       {
         id: 'sec-3',
         type: 'doctor_carousel',
-        background: { kind: 'color', value: '#FFF' },
+        background: { kind: 'color', value: THEME_COLORS.normal.surface },
       },
     ];
 

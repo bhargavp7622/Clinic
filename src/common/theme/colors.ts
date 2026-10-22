@@ -1,0 +1,132 @@
+/**
+ * Centralized Theme Colors Definition
+ * All color tokens are defined here to eliminate manual hardcoded colors across the app.
+ */
+
+export const PALETTE = {
+  // Medical Teal & Emerald
+  teal900: '#134E4A',
+  teal800: '#115E59',
+  teal700: '#0F766E',
+  teal600: '#0D9488',
+  teal500: '#14B8A6',
+  teal100: '#CCFBF1',
+  teal50: '#F0FDFA',
+
+  // Diwali Saffron, Marigold, Gold
+  saffron900: '#7C2D12',
+  saffron800: '#9A3412',
+  saffron700: '#C2410C',
+  saffron600: '#EA580C',
+  saffron500: '#F97316',
+  saffron200: '#FED7AA',
+  saffron100: '#FFEDD5',
+  saffron50: '#FFF7ED',
+
+  gold600: '#D97706',
+  gold500: '#EAB308',
+  gold400: '#FACC15',
+  gold200: '#FDE68A',
+  gold100: '#FEF3C7',
+  gold50: '#FFFBEB',
+
+  // Neutrals / Slate
+  slate900: '#0F172A',
+  slate800: '#1E293B',
+  slate700: '#334155',
+  slate600: '#475569',
+  slate500: '#64748B',
+  slate400: '#94A3B8',
+  slate300: '#CBD5E1',
+  slate200: '#E2E8F0',
+  slate100: '#F1F5F9',
+  slate50: '#F8FAFC',
+  white: '#FFFFFF',
+  black: '#000000',
+
+  // Status & Feedback
+  green700: '#15803D',
+  green600: '#16A34A',
+  green500: '#22C55E',
+  green100: '#DCFCE7',
+
+  amber700: '#B45309',
+  amber600: '#D97706',
+  amber500: '#F59E0B',
+  amber100: '#FEF3C7',
+
+  red700: '#B91C1C',
+  red600: '#DC2626',
+  red500: '#EF4444',
+  red100: '#FEE2E2',
+
+  sky700: '#0369A1',
+  sky600: '#0284C7',
+  sky500: '#0EA5E9',
+  sky100: '#E0F2FE',
+
+  // Translucent Overlays
+  overlayDark: 'rgba(15, 23, 42, 0.55)',
+  overlaySoft: 'rgba(0, 0, 0, 0.25)',
+  overlayLight: 'rgba(255, 255, 255, 0.15)',
+} as const;
+
+export const STANDARD_THEME_COLORS = {
+  primary: PALETTE.teal700,
+  secondary: PALETTE.teal500,
+  background: PALETTE.slate50,
+  surface: PALETTE.white,
+  textPrimary: PALETTE.slate900,
+  textSecondary: PALETTE.slate500,
+  accent: PALETTE.sky600,
+  card: PALETTE.white,
+  border: PALETTE.slate200,
+  notification: PALETTE.red500,
+  success: PALETTE.green600,
+  warning: PALETTE.amber500,
+  error: PALETTE.red500,
+  info: PALETTE.sky600,
+  divider: PALETTE.slate100,
+  badgeBg: PALETTE.teal100,
+  badgeText: PALETTE.teal700,
+  overlay: PALETTE.overlayDark,
+  shimmerBase: PALETTE.slate200,
+  shimmerHighlight: PALETTE.slate50,
+  heroGradient: `${PALETTE.teal700},${PALETTE.teal800}`,
+  offerBg: PALETTE.teal50,
+  offerBorder: PALETTE.teal100,
+  offerText: PALETTE.teal900,
+};
+
+export const FESTIVAL_THEME_COLORS = {
+  primary: PALETTE.saffron700,
+  secondary: PALETTE.saffron600,
+  background: PALETTE.gold50,
+  surface: PALETTE.white,
+  textPrimary: PALETTE.saffron900,
+  textSecondary: PALETTE.saffron800,
+  accent: PALETTE.gold600,
+  card: PALETTE.white,
+  border: PALETTE.saffron200,
+  notification: PALETTE.red500,
+  success: PALETTE.green600,
+  warning: PALETTE.amber500,
+  error: PALETTE.red500,
+  info: PALETTE.gold600,
+  divider: PALETTE.saffron100,
+  badgeBg: PALETTE.saffron100,
+  badgeText: PALETTE.saffron800,
+  overlay: PALETTE.overlayDark,
+  shimmerBase: PALETTE.gold100,
+  shimmerHighlight: PALETTE.gold50,
+  heroGradient: `${PALETTE.saffron700},${PALETTE.saffron900}`,
+  offerBg: PALETTE.gold100,
+  offerBorder: PALETTE.gold200,
+  offerText: PALETTE.saffron900,
+};
+
+export const THEME_COLORS = {
+  normal: STANDARD_THEME_COLORS,
+  festival: FESTIVAL_THEME_COLORS,
+  palette: PALETTE,
+};

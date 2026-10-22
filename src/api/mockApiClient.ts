@@ -1,7 +1,7 @@
-import { LayoutConfig } from '../types/config.types';
-import { Doctor } from '../types/doctor.types';
-import { Slot, Booking, CreateBookingPayload } from '../types/booking.types';
-import { Prescription } from '../types/prescription.types';
+import { LayoutConfig } from '@/types/config.types';
+import { Doctor } from '@/types/doctor.types';
+import { Slot, Booking, CreateBookingPayload } from '@/types/booking.types';
+import { Prescription } from '@/types/prescription.types';
 import {
   NORMAL_LAYOUT_CONFIG,
   FESTIVAL_LAYOUT_CONFIG,
@@ -9,7 +9,7 @@ import {
   MOCK_PRESCRIPTIONS,
   generateMockSlots,
 } from './mockData';
-import { StorageService, DevSettings, DEFAULT_DEV_SETTINGS } from '../services/storage.service';
+import { StorageService, DevSettings, DEFAULT_DEV_SETTINGS } from '@/services/storage.service';
 
 export class ApiError extends Error {
   status: number;
@@ -20,11 +20,9 @@ export class ApiError extends Error {
   }
 }
 
-// Global runtime dev switch controller
 let currentDevSettings: DevSettings = { ...DEFAULT_DEV_SETTINGS };
 let currentConfigMode: 'normal' | 'festival' = 'normal';
 
-// Initializer to load stored dev settings
 export const initApiClient = async () => {
   currentDevSettings = await StorageService.getDevSettings();
   currentConfigMode = await StorageService.getActiveConfigMode();
@@ -44,7 +42,6 @@ export const setRuntimeConfigMode = async (mode: 'normal' | 'festival') => {
 
 export const getRuntimeConfigMode = (): 'normal' | 'festival' => currentConfigMode;
 
-// Helper to simulate delay & test network failure
 const simulateNetwork = async () => {
   if (currentDevSettings.simulatedLatencyMs > 0) {
     await new Promise<void>(resolve => {
@@ -57,33 +54,21 @@ const simulateNetwork = async () => {
 };
 
 export const MockApiClient = {
-  /**
-   * GET /config
-   * Fetches the current remote layout config (Normal or Festival)
-   * If network fails, falls back to cached config from offline storage
-   */
   async getConfig(): Promise<{ config: LayoutConfig; fromCache: boolean }> {
     try {
       await simulateNetwork();
       const config = currentConfigMode === 'festival' ? FESTIVAL_LAYOUT_CONFIG : NORMAL_LAYOUT_CONFIG;
-      // Persist as last good config
       await StorageService.saveCachedConfig(config);
       return { config, fromCache: false };
-    } catch (error) {
-      // Offline fallback: attempt to read cached config
+    } catch {
       const cached = await StorageService.getCachedConfig();
       if (cached) {
         return { config: cached, fromCache: true };
       }
-      // If no cache, return default fallback config
       return { config: NORMAL_LAYOUT_CONFIG, fromCache: true };
     }
   },
 
-  /**
-   * GET /doctors
-   * Returns list of doctors with optional search or specialty filter and pagination
-   */
   async getDoctors(options?: {
     search?: string;
     specialty?: string;
@@ -122,20 +107,11 @@ export const MockApiClient = {
     };
   },
 
-  /**
-   * GET /slots?doctorId=&date=YYYY-MM-DD
-   * Returns available time slots for doctor and date
-   */
   async getSlots(doctorId: string, dateStr: string): Promise<Slot[]> {
     await simulateNetwork();
     return generateMockSlots(doctorId, dateStr);
   },
 
-  /**
-   * POST /bookings { doctorId, slotId }
-   * Creates a booking. Reconciles with mock backend.
-   * Throws 409 if slot is taken (conflict simulation).
-   */
   async createBooking(payload: CreateBookingPayload): Promise<Booking> {
     await simulateNetwork();
 
@@ -163,10 +139,6 @@ export const MockApiClient = {
     return newBooking;
   },
 
-  /**
-   * GET /prescriptions
-   * Returns patient prescriptions
-   */
   async getPrescriptions(searchQuery?: string): Promise<Prescription[]> {
     await simulateNetwork();
     if (!searchQuery) {

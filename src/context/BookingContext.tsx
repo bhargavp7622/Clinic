@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { Booking, CreateBookingPayload } from '../types/booking.types';
-import { MockApiClient, ApiError } from '../api/mockApiClient';
-import { StorageService } from '../services/storage.service';
-import { triggerHaptic } from '../utils/haptics';
+import { Booking, CreateBookingPayload } from '@/types/booking.types';
+import { MockApiClient, ApiError } from '@/api/mockApiClient';
+import { StorageService } from '@/services/storage.service';
+import { triggerHaptic } from '@/utils/haptics';
 
 interface BookingContextType {
   bookings: Booking[];
@@ -46,12 +46,6 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     loadBookings();
   }, [loadBookings]);
 
-  /**
-   * Optimistic booking implementation:
-   * 1. Instantly renders confirmed in UI (0ms delay for user perceived performance)
-   * 2. Reconciles with mock backend in background
-   * 3. Handles 409 conflict rollback or offline sync queue
-   */
   const createBooking = useCallback(
     async (payload: CreateBookingPayload): Promise<{ success: boolean; booking?: Booking; error?: string }> => {
       setIsBookingInProgress(true);
@@ -73,16 +67,13 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         isOptimistic: true,
       };
 
-      // 1. Optimistic instant state update
       setBookings(prev => [optimisticBooking, ...prev]);
       setLastBookedItem(optimisticBooking);
       triggerHaptic('success');
 
       try {
-        // 2. Reconcile with mock server
         const confirmedBooking = await MockApiClient.createBooking(payload);
 
-        // Update with server confirmed id and reconciled state
         setBookings(prev =>
           prev.map(b => (b.id === tempId ? { ...confirmedBooking, isOptimistic: false } : b))
         );
@@ -91,7 +82,6 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         return { success: true, booking: confirmedBooking };
       } catch (err: any) {
         if (err instanceof ApiError && err.status === 409) {
-          // Revert optimistic booking on slot conflict!
           setBookings(prev => prev.filter(b => b.id !== tempId));
           setLastBookedItem(null);
           triggerHaptic('warning');
@@ -101,7 +91,6 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
           };
         }
 
-        // For offline / network failure: retain in offline queue with status pending
         const offlineBooking: Booking = {
           ...optimisticBooking,
           id: `offline-${Date.now()}`,

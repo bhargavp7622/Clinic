@@ -1,24 +1,25 @@
-import { LayoutConfig } from '../types/config.types';
-import { Doctor } from '../types/doctor.types';
-import { Prescription } from '../types/prescription.types';
-import { Slot } from '../types/booking.types';
+import { LayoutConfig } from '@/types/config.types';
+import { Doctor } from '@/types/doctor.types';
+import { Prescription } from '@/types/prescription.types';
+import { Slot } from '@/types/booking.types';
+import { THEME_COLORS } from '@/common/theme';
 
 export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
   version: 1,
   theme: {
-    primary: '#0F766E', // Calming Deep Teal
-    secondary: '#14B8A6', // Vibrant Teal
-    background: '#F8FAFC', // Slate soft grey-white
-    surface: '#FFFFFF',
-    textPrimary: '#0F172A',
-    textSecondary: '#64748B',
-    accent: '#0284C7',
+    primary: THEME_COLORS.normal.primary,
+    secondary: THEME_COLORS.normal.secondary,
+    background: THEME_COLORS.normal.background,
+    surface: THEME_COLORS.normal.surface,
+    textPrimary: THEME_COLORS.normal.textPrimary,
+    textSecondary: THEME_COLORS.normal.textSecondary,
+    accent: THEME_COLORS.normal.accent,
   },
   tabs: [
-    { id: 'tab-home', label: 'Home', icon: 'home', screen: 'home' },
-    { id: 'tab-bookings', label: 'Appointments', icon: 'calendar', screen: 'bookings' },
-    { id: 'tab-prescriptions', label: 'Prescriptions', icon: 'file-text', screen: 'prescriptions' },
-    { id: 'tab-profile', label: 'Profile', icon: 'user', screen: 'profile' },
+    { id: 'tab-home', label: 'tabs.home', icon: 'home', screen: 'home' },
+    { id: 'tab-bookings', label: 'tabs.appointments', icon: 'calendar', screen: 'bookings' },
+    { id: 'tab-prescriptions', label: 'tabs.prescriptions', icon: 'file-text', screen: 'prescriptions' },
+    { id: 'tab-profile', label: 'tabs.profile', icon: 'user', screen: 'profile' },
   ],
   sections: [
     {
@@ -26,16 +27,16 @@ export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'hero_banner',
       background: {
         kind: 'gradient',
-        value: '#0F766E,#115E59',
+        value: THEME_COLORS.normal.heroGradient,
       },
-      title: 'Tapza Care Hyderabad & Vijayawada',
+      title: 'home.hero_section_title',
       items: [
         {
           id: 'banner-1',
-          greeting: 'Namaste, Patient & Family',
-          title: 'Direct WhatsApp Prescriptions & Trusted Clinic Care',
-          subtitle: 'Walk in or book an instant slot with top local specialists',
-          ctaText: 'Book an Appointment',
+          greeting: 'home.greeting_patient',
+          title: 'home.hero_title',
+          subtitle: 'home.hero_subtitle',
+          ctaText: 'home.hero_cta',
           ctaAction: 'navigate:bookings',
         },
       ],
@@ -45,17 +46,17 @@ export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'category_chips',
       background: {
         kind: 'color',
-        value: '#F1F5F9',
+        value: THEME_COLORS.normal.divider,
       },
-      title: 'Explore Specialties & Services',
+      title: 'home.categories_title',
       items: [
-        { id: 'cat-gp', label: 'General Physician', icon: 'stethoscope', categoryKey: 'general' },
-        { id: 'cat-cardio', label: 'Cardiologist', icon: 'heart', categoryKey: 'cardiology' },
-        { id: 'cat-ped', label: 'Pediatrician', icon: 'baby', categoryKey: 'pediatrics' },
-        { id: 'cat-ortho', label: 'Orthopedics', icon: 'activity', categoryKey: 'orthopedics' },
-        { id: 'cat-lab', label: 'Lab Tests', icon: 'clipboard', categoryKey: 'lab_tests' },
-        { id: 'cat-pharm', label: 'Pharmacy Delivery', icon: 'package', categoryKey: 'pharmacy' },
-        { id: 'cat-vac', label: 'Vaccines', icon: 'shield', categoryKey: 'vaccines' },
+        { id: 'cat-gp', label: 'categories.general', icon: 'stethoscope', categoryKey: 'general' },
+        { id: 'cat-cardio', label: 'categories.cardiology', icon: 'heart', categoryKey: 'cardiology' },
+        { id: 'cat-ped', label: 'categories.pediatrics', icon: 'baby', categoryKey: 'pediatrics' },
+        { id: 'cat-ortho', label: 'categories.orthopedics', icon: 'activity', categoryKey: 'orthopedics' },
+        { id: 'cat-lab', label: 'categories.lab_tests', icon: 'clipboard', categoryKey: 'lab_tests' },
+        { id: 'cat-pharm', label: 'categories.pharmacy', icon: 'package', categoryKey: 'pharmacy' },
+        { id: 'cat-vac', label: 'categories.vaccines', icon: 'shield', categoryKey: 'vaccines' },
       ],
     },
     {
@@ -63,14 +64,14 @@ export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'quick_actions',
       background: {
         kind: 'color',
-        value: '#FFFFFF',
+        value: THEME_COLORS.normal.surface,
       },
-      title: 'Quick Actions',
+      title: 'home.quick_actions_title',
       items: [
-        { id: 'qa-book', label: 'Book Doctor', sublabel: 'Instant Slot', icon: 'calendar-plus', action: 'navigate:bookings' },
-        { id: 'qa-rx', label: 'Prescriptions', sublabel: 'WhatsApp Rx', icon: 'file-text', action: 'navigate:prescriptions', badge: 'Active' },
-        { id: 'qa-remind', label: 'Dose Tracker', sublabel: 'Daily Pills', icon: 'bell', action: 'navigate:prescriptions' },
-        { id: 'qa-family', label: 'Family Care', sublabel: 'Add Member', icon: 'users', action: 'action:family' },
+        { id: 'qa-book', label: 'actions.book_doctor', sublabel: 'actions.instant_slot', icon: 'calendar-plus', action: 'navigate:bookings' },
+        { id: 'qa-rx', label: 'actions.prescriptions', sublabel: 'actions.whatsapp_rx', icon: 'file-text', action: 'navigate:prescriptions', badge: 'actions.active' },
+        { id: 'qa-remind', label: 'actions.dose_tracker', sublabel: 'actions.daily_pills', icon: 'bell', action: 'navigate:prescriptions' },
+        { id: 'qa-family', label: 'actions.family_care', sublabel: 'actions.add_member', icon: 'users', action: 'action:family' },
       ],
     },
     {
@@ -78,15 +79,15 @@ export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'offer_strip',
       background: {
         kind: 'color',
-        value: '#ECFDF5',
+        value: THEME_COLORS.normal.offerBg,
       },
-      title: 'Clinic Benefit',
+      title: 'home.clinic_benefit_title',
       items: [
         {
           id: 'off-1',
-          text: '⚡ Free WhatsApp follow-up for 7 days after your clinic visit. Valid across all Tapza partner clinics.',
+          text: 'offers.free_whatsapp_followup',
           couponCode: 'TAPZAFREE',
-          actionText: 'View Details',
+          actionText: 'common.view_details',
         },
       ],
     },
@@ -95,9 +96,9 @@ export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'doctor_carousel',
       background: {
         kind: 'color',
-        value: '#F8FAFC',
+        value: THEME_COLORS.normal.background,
       },
-      title: 'Available Specialists Today',
+      title: 'home.available_specialists',
       items: [
         {
           id: 'doc-carousel-1',
@@ -154,9 +155,9 @@ export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'service_grid',
       background: {
         kind: 'color',
-        value: '#FFFFFF',
+        value: THEME_COLORS.normal.surface,
       },
-      title: 'Order Clinic Diagnostics & Tests (Zepto Style)',
+      title: 'home.diagnostics_title',
       items: [
         {
           id: 'srv-1',
@@ -219,14 +220,13 @@ export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
       ],
     },
     {
-      // Unknown section type to test resilience: specification says unknown type must skip and never crash!
       id: 'sec-unknown-experimental',
       type: 'ai_smart_vitals_telemetry_radar',
       background: {
         kind: 'color',
-        value: '#F1F5F9',
+        value: THEME_COLORS.normal.divider,
       },
-      title: 'Experimental Future Telemetry',
+      title: 'home.experimental_title',
       items: [{ id: 'unk-1', test: 'sample' }],
     },
   ],
@@ -235,41 +235,40 @@ export const NORMAL_LAYOUT_CONFIG: LayoutConfig = {
 export const FESTIVAL_LAYOUT_CONFIG: LayoutConfig = {
   version: 2,
   theme: {
-    primary: '#C2410C', // Festive Deep Saffron
-    secondary: '#EA580C', // Warm Marigold Orange
-    background: '#FFFBEB', // Warm festive cream
-    surface: '#FFFFFF',
-    textPrimary: '#451A03',
-    textSecondary: '#78350F',
-    accent: '#D97706', // Royal Gold
+    primary: THEME_COLORS.festival.primary,
+    secondary: THEME_COLORS.festival.secondary,
+    background: THEME_COLORS.festival.background,
+    surface: THEME_COLORS.festival.surface,
+    textPrimary: THEME_COLORS.festival.textPrimary,
+    textSecondary: THEME_COLORS.festival.textSecondary,
+    accent: THEME_COLORS.festival.accent,
     festival: {
-      name: 'Diwali Dhamaka Care 🪔',
-      greeting: 'Shubh Deepawali! Wishing Good Health to You & Family',
+      name: 'festival.name',
+      greeting: 'festival.greeting',
       bannerImageUrl: 'https://images.unsplash.com/photo-1512474932049-78ac69ede12c?auto=format&fit=crop&w=1200&q=80',
     },
   },
   tabs: [
-    { id: 'tab-home', label: 'Festive Home', icon: 'home', screen: 'home' },
-    { id: 'tab-bookings', label: 'Consult', icon: 'calendar', screen: 'bookings' },
-    { id: 'tab-prescriptions', label: 'Medicines', icon: 'file-text', screen: 'prescriptions' },
-    { id: 'tab-profile', label: 'My Care', icon: 'user', screen: 'profile' },
+    { id: 'tab-home', label: 'tabs.festive_home', icon: 'home', screen: 'home' },
+    { id: 'tab-bookings', label: 'tabs.consult', icon: 'calendar', screen: 'bookings' },
+    { id: 'tab-prescriptions', label: 'tabs.medicines', icon: 'file-text', screen: 'prescriptions' },
+    { id: 'tab-profile', label: 'tabs.my_care', icon: 'user', screen: 'profile' },
   ],
-  // Notice: Completely different section ordering for festival! Offer strip on top, followed by special checkups
   sections: [
     {
       id: 'sec-fest-offer',
       type: 'offer_strip',
       background: {
         kind: 'color',
-        value: '#FEF3C7',
+        value: THEME_COLORS.festival.offerBg,
       },
-      title: 'Diwali Festival Bonanza',
+      title: 'festival.bonanza_title',
       items: [
         {
           id: 'off-fest-1',
-          text: '🪔 DIWALI CARE FEST: 30% Off on Family Health Packages & Free WhatsApp Doctor Re-consultation!',
+          text: 'festival.special_offer_text',
           couponCode: 'DIWALIHEALTH',
-          actionText: 'Claim Now',
+          actionText: 'actions.claim_now',
         },
       ],
     },
@@ -278,16 +277,16 @@ export const FESTIVAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'hero_banner',
       background: {
         kind: 'gradient',
-        value: '#C2410C,#7C2D12',
+        value: THEME_COLORS.festival.heroGradient,
       },
-      title: 'Tapza Diwali Health Mela',
+      title: 'festival.mela_title',
       items: [
         {
           id: 'banner-diwali',
-          greeting: '✨ Shubh Deepawali! Keep Your Sugar & Heart Safe',
-          title: 'Special Festival Clinic Hours in Hyderabad & Vijayawada',
-          subtitle: 'Enjoy sweets with peace of mind. Instant morning & evening clinic slots.',
-          ctaText: 'Book Festive Checkup',
+          greeting: 'festival.banner_greeting',
+          title: 'festival.banner_title',
+          subtitle: 'festival.banner_subtitle',
+          ctaText: 'festival.banner_cta',
           ctaAction: 'navigate:bookings',
         },
       ],
@@ -297,9 +296,9 @@ export const FESTIVAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'service_grid',
       background: {
         kind: 'color',
-        value: '#FFFBEB',
+        value: THEME_COLORS.festival.background,
       },
-      title: 'Diwali Special Health Packages (Special Prices)',
+      title: 'festival.special_packages_title',
       items: [
         {
           id: 'fest-srv-1',
@@ -338,14 +337,14 @@ export const FESTIVAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'quick_actions',
       background: {
         kind: 'color',
-        value: '#FFFFFF',
+        value: THEME_COLORS.festival.surface,
       },
-      title: 'Festive Quick Links',
+      title: 'festival.quick_links_title',
       items: [
-        { id: 'fqa-book', label: 'Doctor Slot', sublabel: 'Fast Track', icon: 'calendar-plus', action: 'navigate:bookings' },
-        { id: 'fqa-rx', label: 'My Prescriptions', sublabel: 'WhatsApp Copy', icon: 'file-text', action: 'navigate:prescriptions', badge: 'Active' },
-        { id: 'fqa-dose', label: 'Pill Reminders', sublabel: 'Stay on Track', icon: 'bell', action: 'navigate:prescriptions' },
-        { id: 'fqa-fest', label: 'Diwali Gifts', sublabel: 'Health Voucher', icon: 'gift', action: 'action:festival' },
+        { id: 'fqa-book', label: 'actions.doctor_slot', sublabel: 'actions.fast_track', icon: 'calendar-plus', action: 'navigate:bookings' },
+        { id: 'fqa-rx', label: 'actions.my_prescriptions', sublabel: 'actions.whatsapp_copy', icon: 'file-text', action: 'navigate:prescriptions', badge: 'actions.active' },
+        { id: 'fqa-dose', label: 'actions.pill_reminders', sublabel: 'actions.stay_on_track', icon: 'bell', action: 'navigate:prescriptions' },
+        { id: 'fqa-fest', label: 'actions.diwali_gifts', sublabel: 'actions.health_voucher', icon: 'gift', action: 'action:festival' },
       ],
     },
     {
@@ -353,9 +352,9 @@ export const FESTIVAL_LAYOUT_CONFIG: LayoutConfig = {
       type: 'doctor_carousel',
       background: {
         kind: 'color',
-        value: '#FFF7ED',
+        value: THEME_COLORS.festival.background,
       },
-      title: 'Doctors On Duty This Festival Week',
+      title: 'festival.doctors_on_duty_title',
       items: [
         {
           id: 'fest-doc-1',
@@ -560,11 +559,11 @@ export const generateMockSlots = (doctorId: string, dateStr: string): Slot[] => 
   const baseSlots = [
     { id: `${doctorId}-${dateStr}-0900`, startsAt: '09:00 AM', endsAt: '09:30 AM', available: true },
     { id: `${doctorId}-${dateStr}-0930`, startsAt: '09:30 AM', endsAt: '10:00 AM', available: true },
-    { id: `${doctorId}-${dateStr}-1030`, startsAt: '10:30 AM', endsAt: '11:00 AM', available: false }, // taken
+    { id: `${doctorId}-${dateStr}-1030`, startsAt: '10:30 AM', endsAt: '11:00 AM', available: false },
     { id: `${doctorId}-${dateStr}-1130`, startsAt: '11:30 AM', endsAt: '12:00 PM', available: true },
     { id: `${doctorId}-${dateStr}-1630`, startsAt: '04:30 PM', endsAt: '05:00 PM', available: true },
     { id: `${doctorId}-${dateStr}-1700`, startsAt: '05:00 PM', endsAt: '05:30 PM', available: true },
-    { id: `${doctorId}-${dateStr}-1800`, startsAt: '06:00 PM', endsAt: '06:30 PM', available: false }, // taken
+    { id: `${doctorId}-${dateStr}-1800`, startsAt: '06:00 PM', endsAt: '06:30 PM', available: false },
     { id: `${doctorId}-${dateStr}-1900`, startsAt: '07:00 PM', endsAt: '07:30 PM', available: true },
   ];
 

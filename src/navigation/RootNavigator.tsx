@@ -1,16 +1,15 @@
 import React from 'react';
 import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types/navigation.types';
+import { RootStackParamList } from '@/types/navigation.types';
 import { TabNavigator } from './TabNavigator';
-import { BookingScreen } from '../screens/Booking';
-import { PrescriptionDetailScreen } from '../screens/PrescriptionDetail';
-import { AdminConfigScreen } from '../screens/AdminConfig';
-import { useAppTheme } from '../context/ThemeContext';
+import { BookingScreen } from '@/screens/Booking';
+import { PrescriptionDetailScreen } from '@/screens/PrescriptionDetail';
+import { AdminConfigScreen } from '@/screens/AdminConfig';
+import { useAppTheme } from '@/context/ThemeContext';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-// Deep linking configuration for bonus points
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['tapzacare://', 'https://tapzacare.in'],
   config: {
