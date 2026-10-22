@@ -19,7 +19,7 @@ describe('LayoutConfig Validation & Resilience', () => {
   it('detects missing theme colors in invalid config', () => {
     const invalidConfig = {
       version: 1,
-      theme: { primary: THEME_COLORS.normal.primary }, // Missing secondary, background, surface, etc.
+      theme: { primary: THEME_COLORS.normal.primary },
       tabs: [],
       sections: [],
     };
@@ -64,7 +64,7 @@ describe('LayoutConfig Validation & Resilience', () => {
       },
       {
         id: 'sec-2',
-        type: 'ai_experimental_drone_delivery', // Unknown type
+        type: 'ai_experimental_drone_delivery',
         background: { kind: 'color', value: THEME_COLORS.normal.surface },
       },
       {

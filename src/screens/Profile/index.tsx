@@ -67,7 +67,7 @@ export const ProfileScreen: React.FC = React.memo(() => {
           </View>
           <View style={{ flex: 1 }}>
             <AppText variant="titleMedium" weight="700">
-              Bhargav Parmar
+              Jhone Doe
             </AppText>
             <AppText variant="bodySmall" colorKey="textSecondary" style={{ marginTop: 2 }}>
               {t('profile.phone_city')}

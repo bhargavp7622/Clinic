@@ -23,7 +23,8 @@
     "no_keep": "No, Keep it",
     "cancel_appointment": "Cancel Appointment",
     "cancel_confirm_message": "Are you sure you want to cancel appointment with {{doctorName}}?",
-    "offline_mode_saved": "Offline mode: Booking saved locally and will sync once reconnected."
+    "offline_mode_saved": "Offline mode: Booking saved locally and will sync once reconnected.",
+    "add": "Add"
   },
   "tabs": {
     "home": "Home",
@@ -52,7 +53,8 @@
     "clinic_benefit_title": "Clinic Benefit",
     "available_specialists": "Available Specialists Today",
     "diagnostics_title": "Order Clinic Diagnostics & Tests (Zepto Style)",
-    "experimental_title": "Experimental Future Telemetry"
+    "experimental_title": "Experimental Future Telemetry",
+    "next_slot": "Next Slot"
   },
   "categories": {
     "general": "General Physician",
@@ -126,7 +128,9 @@
     "no_doctors_found": "No Doctors Found",
     "no_doctors_desc": "Try searching with a different specialty, clinic, or doctor name.",
     "reset_search": "Reset Search",
-    "loading_slots": "Loading available slots..."
+    "loading_slots": "Loading available slots...",
+    "cancel_title": "Cancel Appointment",
+    "cancel_confirm": "Are you sure you want to cancel this appointment?"
   },
   "prescriptions": {
     "title": "Prescriptions & Medicines",

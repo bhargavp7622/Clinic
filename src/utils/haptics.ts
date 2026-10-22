@@ -1,11 +1,34 @@
-import { Vibration, Platform } from 'react-native';
+import { Vibration, Platform, PermissionsAndroid } from 'react-native';
+
+let hasCheckedPermission = false;
+let isVibrationAllowed = true;
+
+const checkVibrationPermission = async () => {
+  if (Platform.OS === 'android') {
+    try {
+      const granted = await PermissionsAndroid.check('android.permission.VIBRATE' as any);
+      isVibrationAllowed = granted;
+    } catch {
+      isVibrationAllowed = true;
+    }
+  }
+  hasCheckedPermission = true;
+};
+
+if (Platform.OS === 'android') {
+  checkVibrationPermission();
+}
 
 export const triggerHaptic = (type: 'light' | 'medium' | 'success' | 'warning' = 'light') => {
+  if (Platform.OS === 'android' && hasCheckedPermission && !isVibrationAllowed) {
+    return;
+  }
+
   try {
     if (Platform.OS === 'android') {
       switch (type) {
         case 'light':
-          Vibration.vibrate(12);
+          Vibration.vibrate(10);
           break;
         case 'medium':
           Vibration.vibrate(25);
@@ -20,5 +43,7 @@ export const triggerHaptic = (type: 'light' | 'medium' | 'success' | 'warning' =
     } else {
       Vibration.vibrate();
     }
-  } catch {}
+  } catch {
+    isVibrationAllowed = false;
+  }
 };

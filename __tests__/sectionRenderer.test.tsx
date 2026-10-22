@@ -54,7 +54,6 @@ describe('SectionRenderer Tests', () => {
       });
     }).not.toThrow();
 
-    // Must render nothing (null)
     expect(renderer.toJSON()).toBeNull();
   });
 });

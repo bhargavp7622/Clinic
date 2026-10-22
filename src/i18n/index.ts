@@ -5,25 +5,35 @@ import hi from './translations/hi.json';
 import te from './translations/te.json';
 import { StorageService } from '../services/storage.service';
 
-export const defaultNS = 'common';
 export const resources = {
-  en,
-  hi,
-  te,
+  en: { translation: en },
+  hi: { translation: hi },
+  te: { translation: te },
 } as const;
 
-export const initI18n = async () => {
-  const savedLang = await StorageService.getLanguage();
+i18n.use(initReactI18next).init({
+  compatibilityJSON: 'v4',
+  resources,
+  lng: 'en',
+  fallbackLng: 'en',
+  defaultNS: 'translation',
+  interpolation: {
+    escapeValue: false,
+  },
+  react: {
+    useSuspense: false,
+  },
+});
 
-  await i18n.use(initReactI18next).init({
-    compatibilityJSON: 'v4',
-    resources,
-    lng: savedLang || 'en',
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+export const initI18n = async () => {
+  try {
+    const savedLang = await StorageService.getLanguage();
+    if (savedLang && (savedLang === 'en' || savedLang === 'hi' || savedLang === 'te')) {
+      if (savedLang !== i18n.language) {
+        await i18n.changeLanguage(savedLang);
+      }
+    }
+  } catch {}
 };
 
 export const changeLanguage = async (lang: 'en' | 'hi' | 'te') => {

@@ -461,7 +461,7 @@ export const MOCK_PRESCRIPTIONS: Prescription[] = [
     issuedAt: '2026-10-20T10:30:00Z',
     doctorName: 'Dr. A. Srinivas Rao, MD',
     clinicName: 'Tapza Clinic, Banjara Hills, Hyderabad',
-    patientName: 'Bhargav Parmar',
+    patientName: 'Jhone Doe',
     diagnosis: 'Type 2 Diabetes & Mild Hypertension Routine Follow-up',
     medicines: [
       {
@@ -495,7 +495,7 @@ export const MOCK_PRESCRIPTIONS: Prescription[] = [
     issuedAt: '2026-10-15T16:00:00Z',
     doctorName: 'Dr. Lakshmi Prasanna, MBBS, DGO',
     clinicName: 'Tapza Women Care, Governorpet, Vijayawada',
-    patientName: 'Bhargav Parmar (Family Record)',
+    patientName: 'Jhone Doe (Family Record)',
     diagnosis: 'Seasonal Viral Fever & Body Aches',
     medicines: [
       {
@@ -529,7 +529,7 @@ export const MOCK_PRESCRIPTIONS: Prescription[] = [
     issuedAt: '2026-09-28T11:15:00Z',
     doctorName: 'Dr. M. Venkat Raman',
     clinicName: 'Tapza Bone & Joint, Ameerpet, Hyderabad',
-    patientName: 'Bhargav Parmar',
+    patientName: 'Jhone Doe',
     diagnosis: 'Mild Cervical & Lower Back Sprain',
     medicines: [
       {

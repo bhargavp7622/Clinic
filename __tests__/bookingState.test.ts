@@ -2,7 +2,6 @@ import { MockApiClient, updateApiClientDevSettings, ApiError, generateMockSlots 
 
 describe('Booking State & Mock API Tests', () => {
   beforeEach(async () => {
-    // Reset dev settings: no latency, no failure, no conflict
     await updateApiClientDevSettings({
       simulatedLatencyMs: 0,
       forceFailure: false,
@@ -63,16 +62,13 @@ describe('Booking State & Mock API Tests', () => {
   });
 
   it('falls back to cached config when network failure is simulated', async () => {
-    // 1. First fetch good config and cache it
     await updateApiClientDevSettings({ forceFailure: false, simulatedLatencyMs: 0 });
     const initial = await MockApiClient.getConfig();
     expect(initial.fromCache).toBe(false);
 
-    // 2. Turn on forced network failure (503)
     await updateApiClientDevSettings({ forceFailure: true });
     const fallback = await MockApiClient.getConfig();
 
-    // Must still succeed via offline cache!
     expect(fallback.config).toBeDefined();
     expect(fallback.fromCache).toBe(true);
   });

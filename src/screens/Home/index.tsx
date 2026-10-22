@@ -80,9 +80,7 @@ export const HomeScreen: React.FC = React.memo(() => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar
-        barStyle={theme.isFestival ? 'dark-content' : 'light-content'}
-      />
+      <StatusBar barStyle="dark-content" />
 
       <OfflineBanner onAdminPress={handleNavigateAdmin} />
 
